@@ -43,6 +43,14 @@ skill writes the same way, in every language. There are three levels, and the mo
 1. **Project rules:** `CODING_RULES.md` at the repo root, committed, so everyone who pulls the repo
    (and any AI tool) gets the same rules. If the user doesn't want the file committed in a repo,
    keep them locally in `~/.claude/senior-dev/projects/<project>/rules.md` (see `references/state-and-local-data.md`).
+   A committed `AGENTS.md` (or similar instruction file) that already defines rules with IDs, for
+   example one generated from a shared standards template, **is** the project rules: don't draft a
+   `CODING_RULES.md` next to it or ask the first-run question. Where a default covers the same
+   ground, its rule wins and you cite only its ID; the defaults still apply where it is silent (say
+   so in the Phase 1 rules line). Rules it marks as tool-enforced (`[tool]`) apply to new and
+   changed lines even where old code breaks them, since GEN-CONS-01 can't override a lint gate. If
+   it names a full check command (lint, types, tests, coverage), that command is part of the Phase 3
+   gate and the done criteria.
 2. **Language defaults:** `rules/<language>.md` in this skill, loaded only for the languages the task
    touches: `csharp-dotnet`, `typescript-angular`, `flutter-dart`, `sql-migrations`, `python`. When
    a task touches a language that has no file, say so and follow `general.md` alone.
@@ -53,7 +61,7 @@ convention the codebase follows consistently, follow the codebase and say so in 
 (GEN-CONS-01). Project rules always win.
 
 **Asking about rules.**
-- *First run on a project* (no project rules in either location): in Phase 1, ask with
+- *First run on a project* (no project rules in any of these locations): in Phase 1, ask with
   AskUserQuestion whether to use the defaults only, write project rules now, or import an existing
   document. To write them, draft from what the project already enforces (CLAUDE.md, AGENTS.md,
   architecture docs, analyzers, lint config, consistent patterns) using `rules/project-template.md`,

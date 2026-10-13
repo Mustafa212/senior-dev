@@ -79,7 +79,8 @@ then, not all at once.
 **Always on**, because these are never skipped:
 - The **story is the source of truth.** Pass it verbatim to every agent. Contradictions become `C-n`
   for the user to resolve, never you.
-- **Coding rules:** the project's `CODING_RULES.md` (or local `rules.md`) over the language defaults
+- **Coding rules:** the project's rules (`CODING_RULES.md`, an `AGENTS.md` that defines rules with
+  IDs, or local `rules.md`) over the language defaults
   over `rules/general.md`. Never edit rules without the user's OK.
 - **State:** one file per story under `.ai-session/senior-dev/` plus an index in
   `.ai-session/STATE.md`. Update `NEXT` **before** each step.
@@ -186,7 +187,8 @@ re-present only the parts that changed.
   Phase 4.
 - **Gate:** the build passes with the project's real build command (`dotnet build <sln>`,
   `npm run build`, `tsc`, and so on), with no new errors and no new warnings in the files you
-  touched, and the related existing tests pass.
+  touched, and the related existing tests pass. If the project defines a full check command (for
+  example in its `AGENTS.md`), that passes too.
 - **Self-check, which produces the AC map.** Walk every AC (in the words the user approved) through
   what you built, close the gaps, and note where each AC is implemented. That becomes the AC map in
   Phase 4. Review rounds are capped, so spend them on what you couldn't see, not on an AC line you
@@ -231,7 +233,8 @@ Non-negotiable:
   plan, an AC or a product decision.
 - Size the next round to what changed, and rerun every related test after fixes.
 
-**Done when** the build is green and the related tests pass; every AC is proven (in Behavior, and in
+**Done when** the build is green, the related tests pass, and the project's full check command
+passes where it defines one; every AC is proven (in Behavior, and in
 UI where it's in scope) with the evidence saved; the mutation check passed where the plan asked for
 it; no blocker or major finding is open; and no ❓ is still waiting.
 

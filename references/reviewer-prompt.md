@@ -31,7 +31,7 @@ See the whole change, committed and uncommitted:
 - not committed yet: `git diff` and `git diff --staged`
 - new files: `git status`, then read every untracked file in full
 Project docs: <CLAUDE.md / architecture docs / skill name>.
-Coding rules in effect: <paths: the repo's CODING_RULES.md or ~/.claude/senior-dev/projects/<project>/rules.md,
+Coding rules in effect: <paths: the repo's CODING_RULES.md, its AGENTS.md rules, or ~/.claude/senior-dev/projects/<project>/rules.md,
 then rules/<language>.md and rules/general.md from the skill>. Read them before you judge conventions.
 The more specific file wins, and project rules can override or disable defaults by ID.
 

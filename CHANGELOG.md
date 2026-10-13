@@ -3,6 +3,22 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 2026-10-13 (review with the user: projects whose rules come from a standards template)
+- **An `AGENTS.md` that defines rules with IDs counts as the project rules** (level 1), for example one
+  generated from a shared standards template. No first-run rules question and no `CODING_RULES.md`
+  drafted next to it. On overlap its rule wins and only its ID is cited, and the defaults fill only
+  the gaps. Its tool-enforced rules apply to new and changed lines even where old code breaks them
+  (GEN-CONS-01 can't override a lint gate).
+- **A project's full check command** (lint, types, tests, coverage), when it defines one, joins the
+  Phase 3 gate and the done criteria. Why: the build plus related tests can be green while the
+  project's own gate (coverage, type check) fails in CI.
+- Why: the precedence named only `CODING_RULES.md` and local `rules.md`, so in such a project the
+  skill would have treated its rules as plain docs. It would have offered to write a duplicate rules
+  file, cited default IDs for rules the project already numbers, and followed old conventions where
+  the project's linter enforces new ones.
+- The skill folder is now a git repository (it was a plain folder), so self-edits can be reviewed
+  and rolled back.
+
 ## 2026-10-12 (review with the user, Part 11: restructure for progressive disclosure)
 - SKILL.md is now **the map** (590 → 297 lines): principles, modes, a "Where the details live"
   table with an **always-on** summary (story as truth, rules, state, local data), each phase as a

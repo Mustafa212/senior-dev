@@ -84,7 +84,8 @@ and you agree it's clearly better, treat that as a plan change and let the user 
   the fixes were broad. It still doesn't get your reasoning.
 
 **You're done when all of these hold:**
-- The build is green, and every related test passes.
+- The build is green, every related test passes, and the project's full check command passes where
+  it defines one.
 - Every AC is proven, in Behavior and also in UI where the UI is in scope, with the evidence saved.
 - The mutation check passed wherever the plan asked for it.
 - No blocker or major findings remain open. Minor findings and nits are either fixed or listed.
