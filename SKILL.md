@@ -194,7 +194,13 @@ re-present only the parts that changed.
   Phase 4. Review rounds are capped, so spend them on what you couldn't see, not on an AC line you
   skipped.
 - Don't commit; committing is the user's call. At the end of each slice, offer a ready commit
-  message so the user can checkpoint before the next slice starts.
+  message so the user can checkpoint before the next slice starts. Follow the repo's commit
+  convention; some enforce one (for example Conventional Commits in a commit-msg hook).
+- **Managed files and baselined debt.** If a hook or the project rules block edits to managed files
+  (lint and test configs, CI, generated instruction files) and the plan needs one changed, raise it
+  as a `C-n`; the change goes upstream, never around the block. Baselined lint debt (a suppressions
+  file, baseline `noqa` comments) is never paid inside a story and never grown; list it as a
+  follow-up.
 
 ## Phase 4 — Show
 

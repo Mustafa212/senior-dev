@@ -16,6 +16,11 @@ numbers. Project-specific learnings live in local notes (see "Local data" in SKI
   skill would have treated its rules as plain docs. It would have offered to write a duplicate rules
   file, cited default IDs for rules the project already numbers, and followed old conventions where
   the project's linter enforces new ones.
+- **Commit messages follow the repo's enforced convention**, and **managed files and baselined debt**
+  are never edited inside a story: a blocked managed file becomes a `C-n` (the change goes
+  upstream), and baselined debt is a follow-up, never paid or grown in the story. Why: in such a
+  repo a run would otherwise propose commit messages the commit-msg hook rejects, or edit around
+  a block. The notes skeleton's Rules line gains "AGENTS.md rules".
 - The skill folder is now a git repository (it was a plain folder), so self-edits can be reviewed
   and rolled back.
 

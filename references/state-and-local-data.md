@@ -79,7 +79,7 @@ Repos: <local path> (<git remote URL>)[, …]
 
 ## Read first        docs or skills to read before coding
 ## Conventions       branch naming, commit style, build / test / run commands
-## Rules             CODING_RULES.md committed | local rules.md | defaults only (decided <date>)
+## Rules             AGENTS.md rules | CODING_RULES.md committed | local rules.md | defaults only (decided <date>)
 ## Facts and traps   one bullet each: the fact, and why it matters
 ## Test setup        harnesses or templates that worked, and where they live
 ```

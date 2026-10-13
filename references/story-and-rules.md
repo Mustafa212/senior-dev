@@ -50,7 +50,8 @@ skill writes the same way, in every language. There are three levels, and the mo
    so in the Phase 1 rules line). Rules it marks as tool-enforced (`[tool]`) apply to new and
    changed lines even where old code breaks them, since GEN-CONS-01 can't override a lint gate. If
    it names a full check command (lint, types, tests, coverage), that command is part of the Phase 3
-   gate and the done criteria.
+   gate and the done criteria. Changes to its rules go upstream, to wherever the file is generated
+   from (its own rule-proposal process), never into the project's copy.
 2. **Language defaults:** `rules/<language>.md` in this skill, loaded only for the languages the task
    touches: `csharp-dotnet`, `typescript-angular`, `flutter-dart`, `sql-migrations`, `python`. When
    a task touches a language that has no file, say so and follow `general.md` alone.
