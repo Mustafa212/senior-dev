@@ -76,7 +76,7 @@ then, not all at once.
 | `references/story-and-rules.md` | Phase 0 (steps 3–4) and Phase 1: the story as source of truth (fetching, verbatim, tracing, contradictions, gap checklist) and where the project's rules come from |
 | `references/state-and-local-data.md` | Phase 0 (steps 1–2), and whenever you write the state or project notes |
 | `references/planning.md` | Phase 2: plan contents, test strategy, UI end to end, mutation check, subagent models |
-| `references/review-loop.md` | Phases 5–7: dispatch order, blindness, second reviewer, tester steps, triage, round sizing |
+| `references/review-loop.md` | Phases 5–7: review package, dispatch order, blindness, second reviewer, tester steps, triage, round sizing, final review across slices |
 | `references/reviewer-brief.md`, `references/tester-brief.md` | when you dispatch the agents (`senior-dev:reviewer`, `senior-dev:tester`, defined in the plugin's `agents/`) |
 | `references/improving.md` | at the end of every run (the retro), and whenever you change the skill |
 
@@ -227,8 +227,9 @@ steps). Then fill in `references/reviewer-brief.md` and `references/tester-brief
 
 Non-negotiable:
 - Agents start fresh and **blind**. Both get the story verbatim, the AC, the out-of-scope list, the
-  resolved C-n, the diff commands, the project's docs and rule files, the test strategy and the proof
-  per AC; only the tester gets the build and run commands. They never get your reasoning, your
+  resolved C-n, the project's docs and rule files, the test strategy and the proof per AC. The
+  reviewer also gets the review package (the whole change in one file); only the tester gets the
+  build and run commands. They never get your reasoning, your
   opinion of the code, the alternatives you rejected, or hints about where to look.
 - The reviewer and the tester's design run in parallel, because both only read. The tester
   executes only after the reviewer has returned, and after you snapshot the changed production
@@ -248,12 +249,15 @@ Non-negotiable:
 - Show one triage table, and batch every ❓ into one message. Ask before any fix that changes the
   plan, an AC or a product decision.
 - Size the next round to what changed, and rerun every related test after fixes.
+- **A story in slices** ends with one final review of the whole change, after the last slice (see
+  `references/review-loop.md`).
 
 **Done when** the build is green, the related tests pass, and the project's full check command
 passes where it defines one; every AC is proven (in Behavior, and in UI where it's in scope) with
 the evidence saved; the mutation check passed where the plan asked for it; no blocker or major
-finding is open (minor findings and nits are fixed or listed); and no ❓ is still waiting. This
-section is the one source of the done criteria and the round cap.
+finding is open (minor findings and nits are fixed or listed), including from the final review of a
+story in slices; and no ❓ is still waiting. This section is the one source of the done criteria and
+the round cap.
 
 **Hard cap: 3 rounds** (per slice). If round 3 still isn't done, stop and show the user the status
 and the options. A loop that won't converge usually means the AC or the approach is wrong, and only

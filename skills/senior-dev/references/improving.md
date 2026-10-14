@@ -37,8 +37,9 @@ never mid-run, so one run never mixes two versions of the workflow.
 - Coding rules aren't part of this skill; they belong to the project (see
   `references/story-and-rules.md`).
 - Every change to the plugin gets a dated entry in `CHANGELOG.md`: what changed and why,
-  described generically ("a run where…"), with no project names or ticket numbers. Bump the
-  version in `.claude-plugin/plugin.json` when the change is released.
+  described generically ("a run where…"), with no project names or ticket numbers. A release
+  bumps the version in `.claude-plugin/plugin.json`, gives the entry that version as its heading,
+  and is published by pushing a `vX.Y.Z` tag, with the user's OK.
 
 **Check every change before you report it:**
 1. Nothing private leaked. Search the plugin for the names of the local project folders, for

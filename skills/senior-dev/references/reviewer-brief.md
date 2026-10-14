@@ -20,10 +20,8 @@ Contradictions already resolved by the user: <C-n → decision, or "none">
 
 ## The change
 Repository: <path>. Base branch: <base>. Changed files: <list>.
-See the whole change, committed and uncommitted:
-- committed on this branch: `git diff <base>...HEAD`
-- not committed yet: `git diff` and `git diff --staged`
-- new files: `git status`, then read every untracked file in full
+Review package: `<path of change.diff>`: the whole change (committed, uncommitted and new files) as
+one diff. Read it first, then open any file in the repository for context.
 
 ## Project docs and rules
 Docs: <CLAUDE.md, AGENTS.md, architecture docs or skills the project uses>

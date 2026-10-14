@@ -32,7 +32,7 @@ for work "in phases", "as a senior", or for a review of your branch against a st
 | Part | What it does |
 |---|---|
 | `skills/senior-dev` | The workflow: phases, gates, modes, the state file, triage, the final report |
-| `agents/reviewer.md` | The blind reviewer. It can't edit files, doesn't build, and judges against the story |
+| `agents/reviewer.md` | The blind reviewer. It has read and search tools only, reads the whole change from one frozen diff, and judges against the story |
 | `agents/tester.md` | The blind QA engineer. It designs cases from the story first, then runs them and classifies every failure |
 
 Neither agent loads your CLAUDE.md files, so your personal working instructions don't reach them.
@@ -90,6 +90,12 @@ plugin:
    why, without project names or ticket numbers.
 3. Open a pull request. Changes reach everyone through `main`, never by a direct push.
 
+**Releases.** Bump `version` in `.claude-plugin/plugin.json`, head the `CHANGELOG.md` entry with
+that version, merge, and push a `vX.Y.Z` tag. The release workflow checks the tag against
+`plugin.json` and publishes a GitHub release with that changelog section. Installed copies pick up
+the new version with `claude plugin marketplace update senior-dev`, then
+`claude plugin update senior-dev@senior-dev`.
+
 ## Layout
 
 ```
@@ -99,6 +105,7 @@ skills/senior-dev/SKILL.md          the map: principles, modes, phases, gates, r
 skills/senior-dev/references/       details read only in the phase that needs them, plus the agent briefs
 agents/reviewer.md, agents/tester.md   the blind agents
 CHANGELOG.md                        every change, with the reason
+.github/workflows/release.yml       a vX.Y.Z tag publishes a GitHub release
 ```
 
 ## License

@@ -8,7 +8,8 @@ Present the following:
 
 - **Slices** (big stories only): when the story has independent groups of AC or spans many layers,
   propose slices. Each slice owns a subset of the AC and goes through Phases 3–7 on its own, with its
-  own 3-round cap. The user sees working pieces early, and reviews stay small and sharp.
+  own 3-round cap. The user sees working pieces early, and reviews stay small and sharp. After the
+  last slice, one final review covers the whole change; count it in the cost.
 - **Steps:** in order, each naming its files (new or modified) and what changes in them, following
   the pattern named in Phase 1. Name any new dependency with a one-line reason; prefer what the
   project or the platform already has.

@@ -3,6 +3,20 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 1.2.0 — 2026-10-14 (final review across slices; review package; releases)
+- **Final review across slices.** A story that ran in slices ends with one more review of the whole
+  change, on the strongest model, with the full story and every AC: one fix pass, then whatever is
+  open goes to the user. Why: each slice review saw only its part, so duplicated logic, patterns
+  that drifted between slices and parts that don't fit together had no reviewer.
+- **Review package.** The main agent writes the whole change (branch commits, uncommitted changes,
+  new files) to `.ai-session/evidence/round-<n>/change.diff` and the reviewer reads that file. The
+  reviewer now has read and search tools only (Read, Grep, Glob), so it can't edit, build or run
+  anything, which the harness enforces. Why: every reviewer sees the same frozen snapshot, the diff
+  stays out of the main agent's context, and "don't build" no longer depends on wording.
+- **Releases.** Pushing a `vX.Y.Z` tag publishes a GitHub release with that version's section of
+  this changelog, after checking that the tag matches `plugin.json`. Tags mark every version from
+  1.0.0 on.
+
 ## 1.1.0 — 2026-10-14 (tester craft; checks the removed rules used to carry)
 - **Tests you can trust** (tester): repeatable (clock, randomness and network controlled, no
   sleeps), independent (own data, any order), one behavior per test, and each test fails without

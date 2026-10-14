@@ -6,10 +6,25 @@
 
 Dispatch the plugin's agents with the Agent tool: `senior-dev:reviewer` and `senior-dev:tester`,
 using the models chosen in the plan. Their instructions live in the agent definitions (`agents/` in
-this plugin); you fill only the brief. The reviewer can't edit files, and neither agent loads the
-CLAUDE.md files, so a user's or project's working instructions don't reach them. If those agent
+this plugin); you fill only the brief. The reviewer has read and search tools only, so it can't edit,
+build or run anything, and neither agent loads the CLAUDE.md files, so a user's or project's working instructions don't reach them. If those agent
 types aren't available, dispatch `general-purpose` agents and put the body of the matching file
 from the plugin's `agents/` folder above the brief.
+
+**Review package.** Before dispatching a reviewer, write the whole change to one file, so every
+reviewer reads the same frozen snapshot and none of the diff enters your own context:
+
+```bash
+B=$(git merge-base <base-branch> HEAD); P=.ai-session/evidence/round-<n>/change.diff
+mkdir -p "$(dirname "$P")"
+{ git diff --stat "$B"; git diff "$B"
+  git ls-files --others --exclude-standard -- . ':!.ai-session' |
+    while read -r f; do git diff --no-index -- /dev/null "$f"; done
+} > "$P"
+```
+
+`git diff $B` covers the branch's commits and the uncommitted changes to tracked files; the loop
+adds the new files. Build a fresh package for every review round.
 
 **Order.** Every agent starts fresh.
 1. Launch the reviewer and the tester's design step in one message. Both only read.
@@ -33,7 +48,7 @@ watchdog kills them.
 | Give them | Never give them |
 |-----------|-----------------|
 | the user story or request **verbatim**, the AC, the out-of-scope list, the resolved C-n decisions | your reasoning or why you picked this approach |
-| the changed files and the exact diff commands | your opinion of the code ("I think it's clean") |
+| the review package and the list of changed files | your opinion of the code ("I think it's clean") |
 | the project's docs and the files that hold its rules | the alternatives you rejected |
 | the approved test strategy and the proof per AC; build and run commands to the tester only | the spots you're worried about, framed as hints to find or skip |
 
@@ -106,5 +121,15 @@ and you agree it's clearly better, treat that as a plan change and let the user 
   fix. Give it the rejected findings and their reasons too; it raises one again only with new
   evidence. Widen to a full review only when the fixes were broad. It still doesn't get your
   reasoning.
+
+## Final review across slices
+
+When the story ran in slices, review the whole change once more after the last slice is done: a
+fresh reviewer on the strongest model, with the full story, every AC, and a review package of the
+entire change from the base branch. Each slice review saw one part; this one looks for what only
+shows across them, such as duplicated logic, patterns that drifted between slices, and parts that
+don't fit together. Its findings go through the same triage. Fix the blockers and majors in one
+pass and rerun every related test, then stop: whatever is still open goes to the user in the final
+report. There is no second final round.
 
 The done criteria and the round cap are in Phase 7 of `SKILL.md`.
