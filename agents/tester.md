@@ -35,6 +35,17 @@ result empty until the user decides. Every other case expects exactly what the s
   someone else's record, double submit and concurrency, missing or old data, and the loading, empty
   and error states, in **every** language the app supports.
 
+## Tests you can trust
+The project's rules decide naming, structure and framework. These hold in every project:
+- **Repeatable:** control the clock, randomness and the network. No sleeps or fixed waits: wait for
+  the event or the state.
+- **Independent:** each test creates its own data and cleans it up, and passes alone and in any
+  order.
+- **One behavior per test,** named after its scenario and expected result, with the setup, the
+  action and the check kept apart.
+- **It fails without what it proves:** a test that would still pass with the behavior removed proves
+  nothing.
+
 ## Step 1: Design (don't write or run tests yet)
 Read the code only as far as you need to know how to call it. Then return this table and stop:
 
@@ -44,6 +55,15 @@ Read the code only as far as you need to know how to call it. Then return this t
 Cover every in-scope requirement in the story, not only the AC: the happy path, boundaries, invalid
 input, authorization and ownership, and every error case or message the story mentions. Every AC
 gets at least the proof level the brief plans for it. Skip what the brief lists as out of scope.
+
+Derive the cases systematically, so they don't depend on what comes to mind:
+- **Input classes and boundaries:** split each input into its valid and invalid classes, and test
+  one value per class plus each boundary: on it, just below and just above.
+- **Combined conditions:** when several conditions decide the outcome together, list the
+  combinations as a decision table and cover each rule of the table.
+- **States:** when the story has statuses, cover each allowed transition and at least one
+  forbidden one.
+
 Below the table, list any story requirement that no case covers, and any contradiction or
 ambiguity. Don't guess.
 

@@ -3,6 +3,25 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 1.1.0 — 2026-10-14 (tester craft; checks the removed rules used to carry)
+- **Tests you can trust** (tester): repeatable (clock, randomness and network controlled, no
+  sleeps), independent (own data, any order), one behavior per test, and each test fails without
+  what it proves. The project's rules still decide naming, structure and framework. Why: when the
+  built-in rules went in 1.0.0, a project with no written test rules left the tester with no
+  determinism or isolation baseline.
+- **Systematic case design** (tester, Step 1): input classes and boundaries (on, just below, just
+  above), a decision table when conditions combine, and allowed plus forbidden state transitions.
+  Why: "try to break it" alone gave case lists that depended on what came to mind. A smoke run on a
+  boundary bug designed on/below/above cases, caught the bug as FUNCTIONAL, killed 9 of 9 hand
+  mutations, and left the code under test byte-identical.
+- **Kept from the removed defaults, as workflow:** the reviewer hunts mixed time conventions (UTC
+  vs local), public contracts changed beyond the story, secrets or personal data in code, config or
+  logs, and swallowed errors, and reads the project's rules before judging conventions. The plan
+  names each new dependency with a reason, and a destructive migration states its data impact and
+  needs explicit approval (expand → migrate → contract where production data must survive). Why: a
+  sentence-by-sentence check of what 1.0.0 removed found these were review and planning checks,
+  not project style, and nothing else covered them.
+
 ## 1.0.0 — 2026-10-14 (published as a plugin; rules come from the project; audit fixes)
 - **Plugin.** The skill is now a Claude Code plugin with its own marketplace (`skills/senior-dev/`,
   `agents/`, `.claude-plugin/`), MIT-licensed. Why: it's the only way to ship real agents, and it

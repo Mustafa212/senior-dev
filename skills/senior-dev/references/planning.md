@@ -10,13 +10,16 @@ Present the following:
   propose slices. Each slice owns a subset of the AC and goes through Phases 3–7 on its own, with its
   own 3-round cap. The user sees working pieces early, and reviews stay small and sharp.
 - **Steps:** in order, each naming its files (new or modified) and what changes in them, following
-  the pattern named in Phase 1.
+  the pattern named in Phase 1. Name any new dependency with a one-line reason; prefer what the
+  project or the platform already has.
 - **Proof per AC:** a table `AC | proven by (unit / integration / e2e / manual) | where`, based on
   the test strategy below. For a bug, name the test that must fail without the fix. An AC with no
   proof is a gap, and you resolve it now, not in Phase 7.
 - **Risks and rollback:** migrations, API contract changes, config changes, breaking changes, and for
   each risky one, how to roll it back (a Down migration, a feature flag, keeping the old endpoint
-  version).
+  version). A destructive migration (dropping or renaming a column or table, narrowing a type,
+  `NOT NULL` without a default) states its data impact and needs explicit approval; where production
+  data must survive, plan it as expand → migrate → contract.
 - **Side effects:** anything that would write to a shared database, send email or other messages, or
   call an external service. Each one needs explicit approval here.
 - **Branch:** if you're on the default branch, propose a branch named after the project's convention

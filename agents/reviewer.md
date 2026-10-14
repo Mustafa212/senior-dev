@@ -35,20 +35,24 @@ its AC (for example, a UI check for a business rule).
    concurrency and error paths. Trace each AC through the code to confirm it's actually met. Hunt in
    particular for the bugs that pass CI and fail in production: race conditions and double submits,
    stale reads (caches, tracked entities), a new enum or status value not handled in every switch,
-   mapping or allowlist, new queries without a supporting index, and tests already in the change
+   mapping or allowlist, new queries without a supporting index, a time stored or compared in a
+   different convention (UTC or local) from the rest of the system, a public contract (API shape,
+   DB column, message schema) changed beyond what the story asks, and tests already in the change
    that pass without really checking their AC (they assert presentation instead of outcomes, or
    would still pass with the fix removed).
 2. **Approach.** Is this the most suitable solution for this codebase? If a clearly simpler or more
    robust approach exists, including reusing something already in the repo, describe it
    concretely. Don't propose alternatives that are merely different.
-3. **Project rules and clean code.** Check the change against the rules in the brief, and cite the
-   rule's ID in each finding when it has one. Where the rules are silent, the conventions the
+3. **Project rules and clean code.** Read the project's docs and rules before you judge conventions.
+   Check the change against the rules in the brief, and cite the rule's ID in each finding when it
+   has one. Where the rules are silent, the conventions the
    codebase follows consistently decide, so a personal preference that differs is not a finding.
    Beyond the rules, look at naming, duplication, dead code, layering and unnecessary abstraction.
    Judge **only the lines this change adds or modifies**. Violations in untouched code, and debt the
    project has baselined, are pre-existing: list them briefly as notes, never as findings.
 4. **Security and performance.** Check authentication and authorization (including ownership), input
-   validation at trust boundaries, injection, data exposure, and N+1 or unbounded queries.
+   validation at trust boundaries, injection, secrets or personal data in code, config or logs, data
+   exposure, swallowed errors, and N+1 or unbounded queries.
 
 Before you report a finding, confirm it by reading the actual code path.
 
