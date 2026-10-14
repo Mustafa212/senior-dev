@@ -1,6 +1,6 @@
 ---
 name: senior-dev
-description: Run a coding task the way a senior developer would, in gated phases. Align on the task and acceptance criteria, get the plan approved, implement, and show the result. Then a blind subagent reviews the change while another blind subagent designs and runs tests, and the work loops until every criterion is proven. It also reviews code the user already wrote against its user story. Use when the user types /senior-dev, or asks to work "as a senior", "senior mode", "in phases", "بالـ phases", "زي senior", "على مراحل", or asks to review their branch or changes against a story ("راجع الـ changes", "review my branch against the story"), or wants a task done with plan approval plus independent review and testing. Not for quick questions or one-line fixes unless the user asks for it explicitly.
+description: Runs a coding task the way a senior developer would, in gated phases with blind review and tests, and reviews code the user already wrote against its user story. Use when the user types /senior-dev, or asks to work "as a senior", "senior mode", "in phases", "بالـ phases", "زي senior", "على مراحل", or asks to review their branch or changes against a story ("راجع الـ changes", "review my branch against the story"), or wants a task done with plan approval plus independent review and testing. Not for quick questions or one-line fixes unless the user asks for it explicitly.
 ---
 
 # Senior Dev: phased delivery
@@ -30,8 +30,8 @@ where you are.
 | 1 | Align | user confirms the acceptance criteria |
 | 2 | Plan | user approves the plan |
 | 3 | Implement | build is green and every AC has been self-checked |
-| 4 | Show | none; continue unless the user says stop |
-| 5 + 6 | Blind review ∥ blind tests | none; the reviewer runs alongside the tester, and heavy commands run one at a time |
+| 4 | Show | none; continue unless the user interrupts |
+| 5 + 6 | Blind review ∥ blind tests | none; the reviewer runs alongside the tester's design, the tester executes after the reviewer returns, and heavy commands run one at a time |
 | 7 | Triage & loop | done criteria met, or the user decides |
 
 ## Modes
@@ -41,12 +41,17 @@ Recommend a mode in Phase 0, once you've sized the task. The user decides.
 | Mode | When | What changes |
 |---|---|---|
 | **Full** (default) | anything with logic, several files, or a user story | nothing; every phase runs |
-| **Lite** | trivial: about 10 lines, one file, no branching logic | one blind review and no tester, because the full loop costs several subagent runs |
+| **Lite** | trivial: about 10 lines, one file, no branching logic | one blind review and no tester, because the full loop costs several subagent runs (see below) |
 | **Review existing** | the user already implemented the story and wants it checked ("خلصت، بص على الـ changes") | the phases adapt as described below |
 
-**Lite on branching logic.** If the user asks for lite but the change branches (exception filters,
-status mapping, conditions), say in Phase 2 that lite means the change won't be tested. Recommend
-at least one runnable check for those branches, and repeat "not tested" in the final report.
+**What Lite proves.** With no tester, you are the only one who runs anything, so:
+- A bug fix still starts red: you write the test that fails without the fix (Phase 3). There's no
+  mutation check.
+- Every other AC is proven by the build, the related existing tests, or a check you run yourself.
+  Mark that evidence **self-verified** in the final report, because nobody independent ran it.
+- If the user asks for lite but the change branches (exception filters, status mapping,
+  conditions), say in Phase 2 that the branches won't be independently tested. Recommend at least
+  one runnable check for them, and repeat "not independently tested" in the final report.
 
 **Review existing.** Don't skip the gates; adapt them:
 - **Phase 0:** the change set is the diff against the base branch plus uncommitted and untracked
@@ -68,24 +73,23 @@ then, not all at once.
 
 | File | Read it |
 |---|---|
-| `references/story-and-rules.md` | Phase 0 (steps 3–4) and Phase 1: the story as source of truth (fetching, verbatim, tracing, contradictions, gap checklist) and the coding rules (levels, the first-run question, IDs) |
+| `references/story-and-rules.md` | Phase 0 (steps 3–4) and Phase 1: the story as source of truth (fetching, verbatim, tracing, contradictions, gap checklist) and where the project's rules come from |
 | `references/state-and-local-data.md` | Phase 0 (steps 1–2), and whenever you write the state or project notes |
 | `references/planning.md` | Phase 2: plan contents, test strategy, UI end to end, mutation check, subagent models |
-| `references/review-loop.md` | Phases 5–7: dispatch, blindness, second reviewer, tester steps, triage, round sizing, done criteria |
-| `references/reviewer-prompt.md`, `references/tester-prompt.md` | when you dispatch the agents |
+| `references/review-loop.md` | Phases 5–7: dispatch order, blindness, second reviewer, tester steps, triage, round sizing |
+| `references/reviewer-brief.md`, `references/tester-brief.md` | when you dispatch the agents (`senior-dev:reviewer`, `senior-dev:tester`, defined in the plugin's `agents/`) |
 | `references/improving.md` | at the end of every run (the retro), and whenever you change the skill |
-| `rules/*.md` | the coding rules in effect |
 
 **Always on**, because these are never skipped:
 - The **story is the source of truth.** Pass it verbatim to every agent. Contradictions become `C-n`
   for the user to resolve, never you.
-- **Coding rules:** the project's rules (`CODING_RULES.md`, an `AGENTS.md` that defines rules with
-  IDs, or local `rules.md`) over the language defaults
-  over `rules/general.md`. Never edit rules without the user's OK.
+- **Rules:** this skill has no coding rules of its own. The project's rules apply: an ai-standards
+  `AGENTS.md` first, then other written rules, else the codebase's consistent conventions. Never
+  edit a project's rules without the user's OK.
 - **State:** one file per story under `.ai-session/senior-dev/` plus an index in
   `.ai-session/STATE.md`. Update `NEXT` **before** each step.
 - **Local data:** anything specific to a project, a company or this machine lives in
-  `~/.claude/senior-dev/`, never in the skill folder.
+  `~/.claude/senior-dev/`, never in the plugin.
 
 ## Phase 0 — Context
 
@@ -98,10 +102,10 @@ depends on them.
    mismatch, before anything else.
 2. **Local data.** Read `~/.claude/senior-dev/config.md` (the tools on this machine). Then find the
    project's local folder, or create it on the first run (see `references/state-and-local-data.md`), and read its
-   `notes.md` (what earlier runs learned) and `rules.md` (project rules kept locally).
+   `notes.md` (what earlier runs learned).
 3. **Story.** If the story is a link, fetch it now. You'll confirm it with the user in Phase 1.
 4. **Docs and rules.** Read the project's own docs (CLAUDE.md, AGENTS.md, and the architecture docs
-   or skills the notes point to), and load the coding rules in effect (see `references/story-and-rules.md`).
+   or skills the notes point to), and find the project's rules in effect (see `references/story-and-rules.md`).
 5. **Live git state.** Run `git status`, then `git fetch`, and read the live branch:
    `git rev-parse --abbrev-ref HEAD`, `git log HEAD..@{u}`, and the last few commits. The session's
    git snapshot goes stale, and teammates often push related work (a shared service, a migration)
@@ -130,8 +134,7 @@ Put the user's decisions first and the reference material after, so the user can
 - **Contradictions and gaps:** each `C-n` with your recommendation (see `references/story-and-rules.md`). If there are none, say so explicitly.
 - **Approaches:** only when there's a real choice: 2–3 options with trade-offs, and your
   recommendation.
-- **Rules:** the rules in effect, as one line. On a project's first run, the rules question
-  instead (see `references/story-and-rules.md`).
+- **Rules:** the project's rules in effect, as one line (see `references/story-and-rules.md`).
 
 Use AskUserQuestion for discrete choices (up to 4 per call). Everything else stays in text, with
 your recommendation.
@@ -166,14 +169,15 @@ to choose the subagent models.
 Present: **slices** (big stories only) · **steps** with their files · **Proof per AC** (for a bug,
 the test that must fail without the fix) · **risks and rollback** · **side effects** that need
 approval · **branch** (if you're on the default one) · **effort, models and cost**, plus the
-optional second reviewer for security, money or data-integrity changes.
+optional second reviewer for security, money or data-integrity changes, naming what it sends to
+which vendor.
 
 Wait for explicit approval ("approve", in the user's language). If the user edits the plan,
 re-present only the parts that changed.
 
 ## Phase 3 — Implement
 
-- Follow the approved plan and the coding rules in effect, and use any skill that helps. Examples:
+- Follow the approved plan and the project's rules in effect, and use any skill that helps. Examples:
   the project's architecture skill, `superpowers:test-driven-development` if the user wants TDD,
   and `superpowers:systematic-debugging` when a build or test fails for unclear reasons.
 - **Bug fixes start red.** Write the test the plan named first, run it, and watch it fail for the
@@ -207,25 +211,29 @@ re-present only the parts that changed.
 - A table of changed files with columns: file | change | why.
 - Excerpts only for the non-obvious parts, not whole files. If a tool can open a diff view, open it.
 - The **AC map** from the self-check: where each AC-n is implemented.
-- **Migrations:** the key SQL statements each migration will run (SQL-MIG-02).
+- **Migrations:** the key SQL statements each migration will run. Never apply one to a shared
+  database without the user's explicit OK.
 - **Try it yourself:** how the user can see it working, either the endpoint with a ready-made request
   or the screen and how to get to it.
 - Deviations from the plan, and the results of the build and related tests.
 
-End Phase 4 with one line telling the user they can say "stop" to look at the code before review
-and tests start. Then go straight on to Phases 5 and 6 in the same turn.
+End Phase 4 with one line telling the user they can press Esc to stop and look at the code before
+review and tests finish. Then go straight on to Phases 5 and 6 in the same turn.
 
 ## Phases 5 + 6 — Blind review and blind tests
 
-**Read first:** `references/review-loop.md` (dispatch rules, the second reviewer, the tester's three
-steps). Then fill in `references/reviewer-prompt.md` and `references/tester-prompt.md`.
+**Read first:** `references/review-loop.md` (dispatch order, the second reviewer, the tester's three
+steps). Then fill in `references/reviewer-brief.md` and `references/tester-brief.md`.
 
 Non-negotiable:
-- Agents start fresh and **blind**. They get the story verbatim, the AC, the out-of-scope list, the
-  resolved C-n, the diff commands, the rule files, the build commands, the test strategy and the
-  proof per AC. They never get your reasoning, your opinion of the code, the alternatives you
-  rejected, or hints about where to look.
-- Reading runs in parallel. Heavy test execution runs one at a time, and you don't build meanwhile.
+- Agents start fresh and **blind**. Both get the story verbatim, the AC, the out-of-scope list, the
+  resolved C-n, the diff commands, the project's docs and rule files, the test strategy and the proof
+  per AC; only the tester gets the build and run commands. They never get your reasoning, your
+  opinion of the code, the alternatives you rejected, or hints about where to look.
+- The reviewer and the tester's design run in parallel, because both only read. The tester
+  executes only after the reviewer has returned, and after you snapshot the changed production
+  files, which you check again when it's done. Heavy test execution runs one at a time, and you
+  don't build meanwhile.
 - The tester designs first. You add **scenarios only**, never expected results taken from the
   implementation.
 
@@ -233,16 +241,19 @@ Non-negotiable:
 
 **Read first:** the triage part of `references/review-loop.md`.
 
-- Grep each finding's quoted code first. Then decide ✅ / ❌ (with a reason) / ⏸ / ❓ against the
-  actual code. The authority is the story, never the code and never the test.
+- Locate each finding by its quoted line first; if the quote doesn't match, read its `file:line`
+  before discarding it. Then decide ✅ / ❌ (with a reason) / ⏸ / ❓ against the actual code. The
+  authority is the story, never the code and never the test.
+- Check the tests the tester left in the repo; no reviewer may see them.
 - Show one triage table, and batch every ❓ into one message. Ask before any fix that changes the
   plan, an AC or a product decision.
 - Size the next round to what changed, and rerun every related test after fixes.
 
 **Done when** the build is green, the related tests pass, and the project's full check command
-passes where it defines one; every AC is proven (in Behavior, and in
-UI where it's in scope) with the evidence saved; the mutation check passed where the plan asked for
-it; no blocker or major finding is open; and no ❓ is still waiting.
+passes where it defines one; every AC is proven (in Behavior, and in UI where it's in scope) with
+the evidence saved; the mutation check passed where the plan asked for it; no blocker or major
+finding is open (minor findings and nits are fixed or listed); and no ❓ is still waiting. This
+section is the one source of the done criteria and the round cap.
 
 **Hard cap: 3 rounds** (per slice). If round 3 still isn't done, stop and show the user the status
 and the options. A loop that won't converge usually means the AC or the approach is wrong, and only
@@ -251,6 +262,9 @@ the user can settle that.
 ## Final report
 
 Keep the chat version **short**. The full detail goes in the delivery log, which is ticket-ready.
+
+First `git fetch` again. If the base branch moved during the run, say so and check for conflicts
+before you write the commit message and the PR description.
 
 **In chat:**
 - The status, and one line per AC (✅ or ❌, with where its evidence is).
@@ -289,18 +303,17 @@ Without one, save the final report as `.ai-session/logs/<date>-<feature>.md`.
 - Changing a test's expected value to make it pass without checking the AC.
 - Declaring the work done while the build fails, a test fails, or an AC has no evidence.
 - Ending a run without writing the delivery log.
-- Writing code that breaks a MUST rule in effect without raising it, or editing the rules without
-  the user's OK.
+- Writing code that breaks one of the project's rules without raising it, or editing the project's
+  rules without the user's OK.
 - Calling a failure FUNCTIONAL without checking the actual outcome, or writing a test that asserts
   text the story doesn't specify.
-- Writing anything project-specific (names, tickets, hosts, tool configuration) into the skill
-  folder.
+- Writing anything project-specific (names, tickets, hosts, tool configuration) into the plugin.
 - Thinking "it's small, I'll skip the review". Say so and offer lite mode instead.
 
 ## Improving this skill
 
 At the end of every run, do the **retro** and act on what it finds, following
-`references/improving.md` (signals, where each change goes, guardrails). In short: generic lessons go
-into the skill (with a CHANGELOG entry), project facts into the local notes, and tool facts into
-the local config. Rules change only with the user's OK, the core principles never weaken without it,
-and every change is reported to the user.
+`references/improving.md` (signals, where to edit, the checks, guardrails). In short: generic
+lessons go into the plugin (with a CHANGELOG entry), project facts into the local notes, and tool
+facts into the local config. The core principles never weaken without the user's OK, and every
+change is checked and reported to the user.

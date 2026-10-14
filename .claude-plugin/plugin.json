@@ -1,0 +1,12 @@
+{
+  "name": "senior-dev",
+  "displayName": "Senior Dev",
+  "version": "1.0.0",
+  "description": "Gated, story-driven delivery: approved acceptance criteria and plan, then a blind reviewer and a blind tester until every criterion is proven",
+  "author": {
+    "name": "Mostafa Shawkey"
+  },
+  "repository": "https://github.com/Mustafa212/senior-dev",
+  "license": "MIT",
+  "keywords": ["workflow", "code-review", "testing", "acceptance-criteria", "user-story"]
+}

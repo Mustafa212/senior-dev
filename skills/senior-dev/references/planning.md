@@ -27,10 +27,9 @@ Present the following:
   it. Name the subagent models you picked (see "Choosing subagent models" below) and the expected cost,
   for example "about 2 subagent runs per round, at most 3 rounds", so the user can weigh Full
   against Lite. For security, money or data-integrity changes, propose the optional second reviewer
-  from another model family (see `references/review-loop.md`). It runs only if the user approves.
-
-Wait for explicit approval ("approve", in the user's language). If the user edits the plan,
-re-present only the parts that changed.
+  from another model family (see `references/review-loop.md`), and say plainly what it sends where:
+  the story, the AC and the diff go to that model's vendor. Some clients don't allow their code to
+  leave for another vendor. It runs only if the user approves.
 
 ### Choosing a test strategy
 
@@ -48,7 +47,7 @@ Pick the cheapest strategy that actually proves the AC:
 
 Mixing strategies is fine, for example unit tests for the rules and one end-to-end run for the
 wiring. Whatever the mix, business rules are proven below the UI, and UI tests prove only the
-wiring (GEN-TEST-04).
+wiring.
 
 **UI end to end**, when an AC is about what the user does or sees:
 - **Web:** drive the real app in a browser tool (a built-in browser, Playwright, or a DevTools MCP,
@@ -58,16 +57,17 @@ wiring (GEN-TEST-04).
   `Semantics(identifier:)`, because Flutter's `Key()` isn't visible to UI automation. If no tool is
   configured, say so in the plan and propose setting one up, recorded in the local config.
 
-**Mutation check** for critical logic (security, money, data integrity, and any bug fix): the plan
-names it, and the tester proves the tests catch a broken implementation. Use the language's
+**Mutation check** for critical logic (security, money, data integrity, and any bug fix in Full
+mode): the plan names it, and the tester proves the tests catch a broken implementation. Use the language's
 mutation tool on the changed code only (Stryker.NET for C#, StrykerJS for TS/JS, mutmut for Python),
 since full runs are slow. If the tool isn't installed, ask before installing it as a local or dev
 tool, or have the tester mutate by hand (break the logic, run the tests, restore it).
 
 ### Choosing subagent models
 
-You decide which model each subagent gets, choosing the cheapest one that can do the job well, and
-you state the choice and the reason in the plan. The user can override it.
+You decide which model each subagent (`senior-dev:reviewer`, `senior-dev:tester`) gets, choosing
+the cheapest one that can do the job well, and you state the choice and the reason in the plan. The
+user can override it.
 
 - **Reviewer:** this is the judgment-heavy role. Use the strongest model (`opus`) when the change
   touches security, money, data integrity or concurrency, spans several layers, or the story is

@@ -3,6 +3,46 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 1.0.0 — 2026-10-14 (published as a plugin; rules come from the project; audit fixes)
+- **Plugin.** The skill is now a Claude Code plugin with its own marketplace (`skills/senior-dev/`,
+  `agents/`, `.claude-plugin/`), MIT-licensed. Why: it's the only way to ship real agents, and it
+  installs and updates in one command.
+- **Real agents for the blind roles.** `senior-dev:reviewer` (it can't edit files) and
+  `senior-dev:tester`. Their fixed instructions live in `agents/`, neither loads CLAUDE.md, and the
+  main agent fills only a brief (`references/reviewer-brief.md`, `tester-brief.md`). Why: "read
+  only" and "blind" were prompt text that a general-purpose agent could ignore, and the user's
+  CLAUDE.md (work logs, self-editing) reached the reviewer.
+- **No built-in coding rules.** `rules/` (general, language defaults, template), the first-run rules
+  question and the local `rules.md` are gone. The project's rules apply: an ai-standards `AGENTS.md`
+  first, then other written rules, else the codebase's consistent conventions, with onboarding to
+  ai-standards suggested once as a separate task. Severity is set by consequence, not by
+  MUST/SHOULD. Why: one source of rules, written into the project and enforced by its tools,
+  instead of a second set inside the skill that could disagree with it.
+- **The tester executes only after the reviewer returns**, and the main agent snapshots the changed
+  production files (`git hash-object -w --no-filters`) before and checks them after. The tester
+  never runs `git checkout/restore/stash/reset/clean`, which would destroy the uncommitted change.
+  Why: a reviewer reading the same tree saw the tester's files and hand mutations, and a mutation
+  left behind went unnoticed.
+- **The reviewer doesn't build or run tests**, and gets no build commands. Why: a parallel build
+  stalls the tester, which an earlier run hit.
+- **Brief slots:** the reviewer gets the planned proof per AC and knows the tests are being written
+  in parallel, and the tester gets the out-of-scope list. Why: round 1 flagged every AC as
+  "untested", and the tester wrote failing tests for out-of-scope items.
+- **Lite defined:** a bug fix still starts red, no mutation check, and other evidence is marked
+  self-verified. Why: Lite said "no tester" while other sections required a mutation check and
+  independent proof.
+- **Quoted line:** one exact line per finding; a quote that doesn't match is checked at its
+  `file:line` before it's discarded. Why: multi-line quotes don't fit a table cell, so real findings
+  were dropped.
+- **Triage checks the tester's tests**, because when only minors are found, no reviewer sees them.
+- **Self-edit checks** (leak search against the local project names, pointers resolve, under 500
+  lines, core principles present, one scenario for behavior changes), edits only in a git clone and
+  never in the plugin cache, changes through pull requests, and skill changes only at the end of a
+  run.
+- Smaller: the second reviewer's plan line names what it sends to which vendor; Phase 4 says "press
+  Esc" instead of "say stop"; the done criteria and round cap live only in SKILL.md; a shorter
+  description; `git fetch` before the final report.
+
 ## 2026-10-13 (review with the user: projects whose rules come from a standards template)
 - **An `AGENTS.md` that defines rules with IDs counts as the project rules** (level 1), for example one
   generated from a shared standards template. No first-run rules question and no `CODING_RULES.md`

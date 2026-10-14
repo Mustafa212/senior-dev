@@ -1,0 +1,38 @@
+# Reviewer brief
+
+Fill in every `<…>` and pass the result as the prompt of the `senior-dev:reviewer` agent, with the
+model picked in the plan. The agent already knows how to review; the brief carries only the facts.
+Don't add anything about your reasoning, your approach, or where you expect problems.
+
+---
+
+## User story (the source of truth, verbatim)
+<the full user story or request, exactly as the user wrote it>
+
+## Acceptance criteria (the implementer's interpretation of the story)
+<AC-1 … AC-n, each with its source line in the story>
+
+Out of scope (decided by the user): <list, or "none">
+Contradictions already resolved by the user: <C-n → decision, or "none">
+
+## Planned proof per AC (the tester is writing these tests now)
+<the plan's table: AC | proven by (unit / integration / e2e / manual) | where>
+
+## The change
+Repository: <path>. Base branch: <base>. Changed files: <list>.
+See the whole change, committed and uncommitted:
+- committed on this branch: `git diff <base>...HEAD`
+- not committed yet: `git diff` and `git diff --staged`
+- new files: `git status`, then read every untracked file in full
+
+## Project docs and rules
+Docs: <CLAUDE.md, AGENTS.md, architecture docs or skills the project uses>
+Rules in effect: <the files that hold the project's rules, for example `AGENTS.md (ai-standards)`, or
+"none written: follow the conventions the codebase uses consistently">
+
+<ROUND 2+ ONLY:
+## Since the last round
+Previous findings and how each was resolved: <# → fixed at file:line / rejected (reason) / deferred>.
+Changed since the last round: <files, and what changed in each, including tests the tester added>.
+Confirm that each item marked as fixed is actually fixed, and review the changes since the last
+round. Don't raise a rejected finding again unless you have new evidence, and if you do, state it.>

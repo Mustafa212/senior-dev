@@ -29,8 +29,8 @@ can't see your agents.
 
 > **For any agent picking this up:** this is a senior-dev run, a gated workflow (align on AC →
 > approved plan → implement → blind review and tests → triage). Don't write code before the plan is
-> approved, and treat the story below as the source of truth. The full workflow is in
-> `~/.claude/skills/senior-dev/SKILL.md` if you can read it. Start from NEXT.
+> approved, and treat the story below as the source of truth. The full workflow is the senior-dev
+> plugin's `skills/senior-dev/SKILL.md`, if you can read it. Start from NEXT.
 
 Story: <link or "pasted">   Mode: Full | Lite | Review existing   Branch: <branch>
 Phase: <n — name>   Last updated: <agent, date time>
@@ -38,10 +38,11 @@ NEXT: <the single next action>
 
 ## Story (verbatim)
 ## AC (approved)
-## Decisions        C-n → decision; rules; models; second reviewer yes/no
+## Decisions        C-n → decision; rules in effect; models; second reviewer yes/no
 ## Plan             steps or slices, each TODO / IN PROGRESS / DONE / BLOCKED
 ## Files changed    so far, a few words on each
-## Agents           dispatched background agents, their status, what to do if lost
+## Agents           dispatched background agents, their status, what to do if lost; file hashes
+                   taken before the tester executes
 ## Rounds           per round: findings → decisions, fixes, test results
 ## Evidence         paths under .ai-session/evidence/
 ```
@@ -54,15 +55,14 @@ gates, and continues from NEXT.
 
 ## Local data
 
-This skill folder is **generic and shareable**, and it may be published. Anything specific to a
-project, a company or this machine lives outside it, in `~/.claude/senior-dev/`, and never gets
-copied into the skill. You create and maintain these files yourself:
+This plugin is **generic and public**. Anything specific to a project, a company or this machine
+lives outside it, in `~/.claude/senior-dev/`, and never gets copied into the plugin. You create and
+maintain these files yourself:
 
 ```
 ~/.claude/senior-dev/
   config.md                      tools on this machine: work-item and DB MCPs and their quirks, work-log spec, OS quirks
   projects/<project>/notes.md    learned facts: commands, test setup, traps, branch naming, docs to read
-  projects/<project>/rules.md    project rules kept locally (when CODING_RULES.md isn't committed), or "defaults only"
 ```
 
 **Every project gets its own folder.** In Phase 0, match the current repo's path or git remote
@@ -79,7 +79,7 @@ Repos: <local path> (<git remote URL>)[, …]
 
 ## Read first        docs or skills to read before coding
 ## Conventions       branch naming, commit style, build / test / run commands
-## Rules             AGENTS.md rules | CODING_RULES.md committed | local rules.md | defaults only (decided <date>)
+## Rules             ai-standards AGENTS.md | other written rules (which files) | conventions only
 ## Facts and traps   one bullet each: the fact, and why it matters
 ## Test setup        harnesses or templates that worked, and where they live
 ```
@@ -88,12 +88,12 @@ Repos: <local path> (<git remote URL>)[, …]
 convention, a trap, a data fact, a test harness, a rules decision), write it to the project's folder
 during the run, not just at the end, so a dead session loses nothing. Tool and machine facts (an
 MCP's quirk, an OS quirk) go in `config.md`. If you're about to write a project name, ticket number,
-internal host, URL or tool configuration into the skill folder, it belongs here instead, and only
-the general lesson goes into the skill.
+internal host, URL or tool configuration into the plugin, it belongs here instead, and only the
+general lesson goes into the plugin.
 
 **Keep notes true and small.** Date each new fact. Before relying on a fact that names a file,
 function or command, check it still exists, and fix or delete a fact the moment it proves wrong.
 Keep each `notes.md` under about 100 lines by merging related facts and dropping stale ones. When a
 note is really a team rule (for example "never apply migrations without an explicit OK"), propose
-promoting it to the project's coding rules. That needs the user's OK, since rules are a team
-contract.
+it as a project rule, through ai-standards' rule proposal where the project uses it. That needs the
+user's OK, since rules are a team contract.
