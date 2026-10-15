@@ -3,6 +3,24 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 1.3.1 — 2026-10-15 (Phase 2 gate in Lite; review package scoped to the change set)
+- **No mode skips the Phase 2 gate.** Phase 1's approval never covers the plan; in Lite, Phase 1
+  and 2 may share one message with the plan written out in full (effort, models and cost), and one
+  approval then covers both. A new red flag names the skip. Why: a Lite run took the Phase 1
+  "approve" as approval of a plan the user never saw, and picked the reviewer's model silently.
+- **Review package limited to the change set.** The recipe diffed the whole working tree, so a
+  file someone else had staged and an unrelated untracked note would have gone to the reviewer as
+  part of the change. It now takes the change set's paths, and the brief lists every other file
+  that differs ("Not in the package", names only) so a changed file missing from "Files changed"
+  can't slip past review unseen. Why: a run whose tree held foreign work showed the old recipe
+  packaging it.
+- **Lite: the self-verified checks go in the package.** With no tester, the one reviewer skipped
+  the checks that proved the AC because they lived outside the diff, so nobody independent ever
+  read them. Why: Lite's evidence rested on checks only the implementer had seen.
+- **Ignore check uses `git check-ignore`.** Checking only `.gitignore` missed `.ai-session/`
+  already ignored through `.git/info/exclude`, and a run asked the user about a change that wasn't
+  needed.
+
 ## 1.3.0 — 2026-10-15 (launch brief, PR step, heavy-command lock)
 - **Launch brief.** A run started with `.ai-session/launch.md` (from an orchestrator such as
   sprint-pilot) reads it in Phase 0: the story, the user's tasks, a scout's gaps (re-checked in

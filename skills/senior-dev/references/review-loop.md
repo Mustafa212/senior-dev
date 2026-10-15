@@ -16,15 +16,23 @@ reviewer reads the same frozen snapshot and none of the diff enters your own con
 
 ```bash
 B=$(git merge-base <base-branch> HEAD); P=.ai-session/evidence/round-<n>/change.diff
+F=(<the change set: the state's "Files changed", plus tests kept in the repo>)
 mkdir -p "$(dirname "$P")"
-{ git diff --stat "$B"; git diff "$B"
-  git ls-files --others --exclude-standard -- . ':!.ai-session' |
+{ git diff --stat "$B" -- "${F[@]}"; git diff "$B" -- "${F[@]}"
+  git ls-files --others --exclude-standard -- "${F[@]}" |
     while read -r f; do git diff --no-index -- /dev/null "$f"; done
 } > "$P"
 ```
 
 `git diff $B` covers the branch's commits and the uncommitted changes to tracked files; the loop
-adds the new files. Build a fresh package for every review round.
+adds the new files. Limit both to the change set: the working tree can hold someone else's staged
+or untracked files, and the reviewer would judge them as part of the change. In Lite mode, append
+your self-verified check files too (`git diff --no-index -- /dev/null <file> >> "$P"`, since
+`.ai-session/` is ignored), so the one reviewer also judges whether they prove their AC. Then
+compare the whole tree with the change set (`git diff --name-only "$B"` and `git status --short`):
+list every other file that differs, by name only, in the brief under "Not in the package", so a
+file you changed but left out of "Files changed" can't slip past review unseen. Build a fresh
+package for every review round.
 
 **Order.** Every agent starts fresh.
 1. Launch the reviewer and the tester's design step in one message. Both only read.

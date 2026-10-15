@@ -179,7 +179,9 @@ optional second reviewer for security, money or data-integrity changes, naming w
 which vendor.
 
 Wait for explicit approval ("approve", in the user's language). If the user edits the plan,
-re-present only the parts that changed.
+re-present only the parts that changed. Phase 1's approval never covers the plan: no mode skips
+this gate. In Lite, Phase 1 and Phase 2 may go in one message, with the plan written out in full
+(effort, models and cost included); then one approval covers both.
 
 ## Phase 3 — Implement
 
@@ -316,7 +318,8 @@ Without one, save the final report as `.ai-session/logs/<date>-<feature>.md`.
 
 ## Red flags
 
-- Writing production code before the Phase 2 approval.
+- Writing production code before the Phase 2 approval, or taking Phase 1's approval as approval of
+  a plan the user hasn't seen (with its effort, models and cost), in Lite too.
 - Resolving a contradiction in the story yourself, or quietly dropping or reinterpreting a story
   requirement.
 - Passing the agents your AC without the original story text.
