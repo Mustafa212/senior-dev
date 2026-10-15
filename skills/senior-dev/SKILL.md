@@ -103,7 +103,11 @@ depends on them.
 2. **Local data.** Read `~/.claude/senior-dev/config.md` (the tools on this machine). Then find the
    project's local folder, or create it on the first run (see `references/state-and-local-data.md`), and read its
    `notes.md` (what earlier runs learned).
-3. **Story.** If the story is a link, fetch it now. You'll confirm it with the user in Phase 1.
+3. **Story.** If the run started with a launch brief (`.ai-session/launch.md`, written by an
+   orchestrator such as sprint-pilot), read it first: the story, your tasks, gaps a scout found, the
+   branch, the base, the PR target, dependencies and conflicts. Its gaps are a starting point that
+   Phase 1 re-checks, never findings. Record `Base` in the state. If the story is a link, fetch it
+   now. You'll confirm it with the user in Phase 1.
 4. **Docs and rules.** Read the project's own docs (CLAUDE.md, AGENTS.md, and the architecture docs
    or skills the notes point to), and find the project's rules in effect (see `references/story-and-rules.md`).
 5. **Live git state.** Run `git status`, then `git fetch`, and read the live branch:
@@ -168,7 +172,7 @@ to choose the subagent models.
 
 Present: **slices** (big stories only) · **steps** with their files · **Proof per AC** (for a bug,
 the test that must fail without the fix) · **risks and rollback** · **side effects** that need
-approval · **branch** (if you're on the default one) · **effort, models and cost**, plus the
+approval · **branch** (if you're on the default one; with a launch brief, show the brief's branch, which already exists) · **effort, models and cost**, plus the
 optional second reviewer for security, money or data-integrity changes, naming what it sends to
 which vendor.
 
