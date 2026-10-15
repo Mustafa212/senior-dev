@@ -79,6 +79,7 @@ then, not all at once.
 | `references/review-loop.md` | Phases 5–7: review package, dispatch order, blindness, second reviewer, tester steps, triage, round sizing, final review across slices |
 | `references/reviewer-brief.md`, `references/tester-brief.md` | when you dispatch the agents (`senior-dev:reviewer`, `senior-dev:tester`, defined in the plugin's `agents/`) |
 | `references/improving.md` | at the end of every run (the retro), and whenever you change the skill |
+| `references/pull-request.md` | after the final report: the one commit, push and PR question |
 
 **Always on**, because these are never skipped:
 - The **story is the source of truth.** Pass it verbatim to every agent. Contradictions become `C-n`
@@ -203,9 +204,10 @@ re-present only the parts that changed.
   what you built, close the gaps, and note where each AC is implemented. That becomes the AC map in
   Phase 4. Review rounds are capped, so spend them on what you couldn't see, not on an AC line you
   skipped.
-- Don't commit; committing is the user's call. At the end of each slice, offer a ready commit
-  message so the user can checkpoint before the next slice starts. Follow the repo's commit
-  convention; some enforce one (for example Conventional Commits in a commit-msg hook).
+- Don't commit during the run; committing is the user's call, and the PR step at the end asks for
+  it. At the end of each slice, offer a ready commit message so the user can checkpoint before the
+  next slice starts. Follow the repo's commit convention; some enforce one (for example
+  Conventional Commits in a commit-msg hook).
 - **Managed files and baselined debt.** If a hook or the project rules block edits to managed files
   (lint and test configs, CI, generated instruction files) and the plan needs one changed, raise it
   as a `C-n`; the change goes upstream, never around the block. Baselined lint debt (a suppressions
@@ -283,7 +285,7 @@ before you write the commit message and the PR description.
   and what QA should focus on (anything tests don't cover, COSMETIC changes the tester saw, risky
   areas).
 - A suggested commit message and a ready-to-paste PR description (summary, AC, tests, deploy notes).
-  Don't commit or open a PR unless the user asks.
+- **PR:** opened (link), draft (link), committed and pushed only, or not opened.
 - **Cleanup:** stop every app, server or emulator this run started (only those). Ask whether to
   keep, promote or delete the throwaway test project, and whether to keep the evidence folder.
 - **Skill updates:** what changed in this skill during the run and why, or "none" (see `references/improving.md`).
@@ -293,7 +295,9 @@ before you write the commit message and the PR description.
 outcome (fixed, rejected and deferred), the tests (counts and location), the files changed, and the
 Deploy & QA notes.
 
-Mark the state file DONE.
+Show the report, then run the PR step (`references/pull-request.md`): one question, and nothing is
+committed, pushed or opened without a yes. Fill in the PR line from its outcome, then mark the
+state file DONE.
 
 ## Delivery log
 
@@ -319,6 +323,8 @@ Without one, save the final report as `.ai-session/logs/<date>-<feature>.md`.
   text the story doesn't specify.
 - Writing anything project-specific (names, tickets, hosts, tool configuration) into the plugin.
 - Thinking "it's small, I'll skip the review". Say so and offer lite mode instead.
+- Committing, pushing or opening a pull request without a yes in the PR step, or staging files
+  outside the change set.
 
 ## Improving this skill
 
