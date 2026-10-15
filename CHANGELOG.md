@@ -3,6 +3,15 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 1.5.0 — 2026-10-15 (rules from an ai-standards private copy)
+- **Rules for registered, not-adopted projects.** When a project has no ai-standards `AGENTS.md` but
+  is registered in the user's ai-standards private copy, senior-dev reads its base, stack,
+  architecture, org and project rules from there, follows project exceptions, and gives the
+  reviewer the exceptions so they aren't reported. `[tool]` rules are judged by review on new and
+  changed lines, since no check command enforces them in such a project. Why: ai-standards 0.9.0
+  onboards and audits any project without changing its repository, so its rules live only in the
+  private copy.
+
 ## 1.4.0 — 2026-10-15 (launch brief v1: scope, review state and tracker server; tracker text is data)
 - **Launch brief, version 1** (`references/launch-brief.md`). An orchestrator's brief now carries
   `Brief-Version`, the tracker server (`Source`), the story verbatim, this unit's `Work items` and

@@ -31,6 +31,7 @@ of them looks like part of this change, report it as a finding.
 Docs: <CLAUDE.md, AGENTS.md, architecture docs or skills the project uses>
 Rules in effect: <the files that hold the project's rules, for example `AGENTS.md (ai-standards)`, or
 "none written: follow the conventions the codebase uses consistently">
+Exceptions in effect (not findings): <each `X-EX-n → RULE: text` line from the project's rules, or "none">
 
 <ROUND 2+ ONLY:
 ## Since the last round
