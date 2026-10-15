@@ -15,8 +15,9 @@ The state lets the work continue anywhere: after a crash, in a new session, or i
   for other work, add or update a `## senior-dev runs` section and leave the rest alone. If it
   doesn't exist, create it with that section and a `## NEXT ACTION` line naming the active story.
   Remove a run's line when the run is DONE.
-- Before you create `.ai-session/`, check that `.gitignore` covers it. If it doesn't, ask before
-  you edit `.gitignore`.
+- Before you create `.ai-session/`, check that git ignores it with `git check-ignore -v
+  .ai-session/STATE.md`, which also sees `.git/info/exclude` and global excludes. If nothing does,
+  ask before you edit `.gitignore`.
 
 **When to write:** update `NEXT` and the step's status **before** each step, not only at phase
 transitions, so a crash or a switch of program mid-step still points the right way. Keep the index

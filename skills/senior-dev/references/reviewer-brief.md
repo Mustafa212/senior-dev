@@ -22,6 +22,8 @@ Contradictions already resolved by the user: <C-n → decision, or "none">
 Repository: <path>. Base branch: <base>. Changed files: <list>.
 Review package: `<path of change.diff>`: the whole change (committed, uncommitted and new files) as
 one diff. Read it first, then open any file in the repository for context.
+Not in the package (other files that differ in the tree, by name only): <list, or "none">. If one
+of them looks like part of this change, report it as a finding.
 
 ## Project docs and rules
 Docs: <CLAUDE.md, AGENTS.md, architecture docs or skills the project uses>
