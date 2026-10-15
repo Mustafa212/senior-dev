@@ -55,10 +55,13 @@ order:
    `~/.claude/ai-standards/config.md` names a private copy (`Clone:`) where a file
    `orgs/<org>/projects/<slug>.md` has this repository's remote as its `repo:` (ignore `user@` and a
    trailing `.git`). The rules in effect are base (`rules/base.md`), the stack's
-   (`rules/stacks/<stack>.md`, from the header's `stack:`), the architecture's if the header names
-   one, the org's (`orgs/<org>/rules.md`) and the project's (that file). The rule files contain
-   template syntax (`{{ }}`, `{% %}`): read through it, using the branch for this stack. Cite the
-   IDs. A line `- **X-EX-n [exception] → RULE**` replaces that rule for this project: follow the
+   (`rules/stacks/<stack>.md`, from the header's `stack:`; an angular project also has
+   `rules/stacks/typescript.md`), the architecture's for dotnet
+   (`rules/architectures/dotnet-<architecture>.md`, `simple` when the header names none), the org's
+   (`orgs/<org>/rules.md`) and the project's (that file). The rule files contain template syntax
+   (`{{ }}`, `{% %}`): read through it, using the branch for this stack. Thresholds such as
+   `{{ cfg.max_params }}` come from `config/defaults.jinja`, overridden by `orgs/<org>/settings.jinja`.
+   Cite the IDs. A line `- **X-EX-n [exception] → RULE**` replaces that rule for this project: follow the
    exception. No check command enforces these rules here, so judge `[tool]` rules by review, on new
    and changed lines only. The latest audit report
    (`~/.claude/ai-standards/reports/<org>/<slug>/STANDARDS-DEBT.md`) lists the known debt, which is
