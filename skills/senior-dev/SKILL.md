@@ -79,6 +79,7 @@ then, not all at once.
 | `references/review-loop.md` | Phases 5–7: review package, dispatch order, blindness, second reviewer, tester steps, triage, round sizing, final review across slices |
 | `references/reviewer-brief.md`, `references/tester-brief.md` | when you dispatch the agents (`senior-dev:reviewer`, `senior-dev:tester`, defined in the plugin's `agents/`) |
 | `references/improving.md` | at the end of every run (the retro), and whenever you change the skill |
+| `references/pull-request.md` | after the final report: the one commit, push and PR question |
 
 **Always on**, because these are never skipped:
 - The **story is the source of truth.** Pass it verbatim to every agent. Contradictions become `C-n`
@@ -87,7 +88,8 @@ then, not all at once.
   `AGENTS.md` first, then other written rules, else the codebase's consistent conventions. Never
   edit a project's rules without the user's OK.
 - **State:** one file per story under `.ai-session/senior-dev/` plus an index in
-  `.ai-session/STATE.md`. Update `NEXT` **before** each step.
+  `.ai-session/STATE.md`. Update `NEXT` **before** each step, and `Waiting` whenever you stop for
+  the user and once they answer.
 - **Local data:** anything specific to a project, a company or this machine lives in
   `~/.claude/senior-dev/`, never in the plugin.
 
@@ -103,7 +105,11 @@ depends on them.
 2. **Local data.** Read `~/.claude/senior-dev/config.md` (the tools on this machine). Then find the
    project's local folder, or create it on the first run (see `references/state-and-local-data.md`), and read its
    `notes.md` (what earlier runs learned).
-3. **Story.** If the story is a link, fetch it now. You'll confirm it with the user in Phase 1.
+3. **Story.** If the run started with a launch brief (`.ai-session/launch.md`, written by an
+   orchestrator such as sprint-pilot), read it first: the story, your tasks, gaps a scout found, the
+   branch, the base, the PR target, dependencies and conflicts. Its gaps are a starting point that
+   Phase 1 re-checks, never findings. Record `Base` in the state. If the story is a link, fetch it
+   now. You'll confirm it with the user in Phase 1.
 4. **Docs and rules.** Read the project's own docs (CLAUDE.md, AGENTS.md, and the architecture docs
    or skills the notes point to), and find the project's rules in effect (see `references/story-and-rules.md`).
 5. **Live git state.** Run `git status`, then `git fetch`, and read the live branch:
@@ -168,7 +174,7 @@ to choose the subagent models.
 
 Present: **slices** (big stories only) · **steps** with their files · **Proof per AC** (for a bug,
 the test that must fail without the fix) · **risks and rollback** · **side effects** that need
-approval · **branch** (if you're on the default one) · **effort, models and cost**, plus the
+approval · **branch** (if you're on the default one; with a launch brief, show the brief's branch, which already exists) · **effort, models and cost**, plus the
 optional second reviewer for security, money or data-integrity changes, naming what it sends to
 which vendor.
 
@@ -184,7 +190,12 @@ re-present only the parts that changed.
   reported reason. Then fix the bug and watch the test pass. That gives you the bug's evidence and
   the fix's proof as part of the work itself.
 - **Small steps.** Build after each step or slice, and run the existing tests related to the files
-  you touched, so errors show up while they're still small.
+  you touched, so errors show up while they're still small. Run every build and test suite as
+  `bash "${CLAUDE_PLUGIN_ROOT}/scripts/heavy.sh" <command>`: it lets one heavy command run at a time
+  across every session on the machine, so parallel runs don't stall each other. Only commands that
+  finish go through it, never a dev server or a watch mode; several commands go as
+  `bash heavy.sh bash -c '<commands>'`. "heavy.sh: waiting for …" means another session is
+  building: give the call a long timeout, or run it in the background, rather than calling it a hang.
 - If you find the plan is wrong, an AC can't be met as written, or the story conflicts with what you
   find in the code or data, stop. Bring the problem and a proposal to the user instead of deviating
   silently. Small mechanical deviations (an extra `using`, a renamed local) are fine; note them in
@@ -197,9 +208,10 @@ re-present only the parts that changed.
   what you built, close the gaps, and note where each AC is implemented. That becomes the AC map in
   Phase 4. Review rounds are capped, so spend them on what you couldn't see, not on an AC line you
   skipped.
-- Don't commit; committing is the user's call. At the end of each slice, offer a ready commit
-  message so the user can checkpoint before the next slice starts. Follow the repo's commit
-  convention; some enforce one (for example Conventional Commits in a commit-msg hook).
+- Don't commit during the run; committing is the user's call, and the PR step at the end asks for
+  it. At the end of each slice, offer a ready commit message so the user can checkpoint before the
+  next slice starts. Follow the repo's commit convention; some enforce one (for example
+  Conventional Commits in a commit-msg hook).
 - **Managed files and baselined debt.** If a hook or the project rules block edits to managed files
   (lint and test configs, CI, generated instruction files) and the plan needs one changed, raise it
   as a `C-n`; the change goes upstream, never around the block. Baselined lint debt (a suppressions
@@ -277,9 +289,9 @@ before you write the commit message and the PR description.
   and what QA should focus on (anything tests don't cover, COSMETIC changes the tester saw, risky
   areas).
 - A suggested commit message and a ready-to-paste PR description (summary, AC, tests, deploy notes).
-  Don't commit or open a PR unless the user asks.
 - **Cleanup:** stop every app, server or emulator this run started (only those). Ask whether to
   keep, promote or delete the throwaway test project, and whether to keep the evidence folder.
+- **PR:** the outcome of the PR step (below).
 - **Skill updates:** what changed in this skill during the run and why, or "none" (see `references/improving.md`).
 - **Delivery log:** where it was saved (a link or a path).
 
@@ -287,7 +299,13 @@ before you write the commit message and the PR description.
 outcome (fixed, rejected and deferred), the tests (counts and location), the files changed, and the
 Deploy & QA notes.
 
-Mark the state file DONE.
+The end of a run, in this order:
+1. Show the report and get the cleanup answers. Tests promoted into the repo join the change set.
+2. Run the PR step (`references/pull-request.md`): one question, and nothing is committed, pushed or
+   opened without a yes.
+3. Write its outcome as the PR line in the chat, the state and the delivery log, so the log
+   carries the pull request's link.
+4. Mark the state file DONE.
 
 ## Delivery log
 
@@ -313,6 +331,8 @@ Without one, save the final report as `.ai-session/logs/<date>-<feature>.md`.
   text the story doesn't specify.
 - Writing anything project-specific (names, tickets, hosts, tool configuration) into the plugin.
 - Thinking "it's small, I'll skip the review". Say so and offer lite mode instead.
+- Committing, pushing or opening a pull request without a yes in the PR step, or staging files
+  outside the change set.
 
 ## Improving this skill
 

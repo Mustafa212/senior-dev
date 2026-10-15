@@ -22,7 +22,11 @@ The state lets the work continue anywhere: after a crash, in a new session, or i
 transitions, so a crash or a switch of program mid-step still points the right way. Keep the index
 line in sync. When you dispatch a background agent (reviewer, tester, second reviewer), record it,
 along with what to do if its result never arrives (usually "rerun it"), because another program
-can't see your agents.
+can't see your agents. Set `Waiting: yes — <what you asked>` just before you stop for the user (a
+gate, a ❓, the PR step) and `Waiting: no` once they answer. `Base` is the branch the work started
+from: the launch brief's, or the one you branched from in Phase 2. `PR` is the pull request's URL
+once one is opened. An orchestrator reads these three fields to show the user where every run
+stands.
 
 ```
 # <story id> — <title>
@@ -35,6 +39,7 @@ can't see your agents.
 Story: <link or "pasted">   Mode: Full | Lite | Review existing   Branch: <branch>
 Phase: <n — name>   Last updated: <agent, date time>
 NEXT: <the single next action>
+Waiting: no   Base: <branch the work started from>   PR: none
 
 ## Story (verbatim)
 ## AC (approved)

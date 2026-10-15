@@ -101,4 +101,5 @@ Implement the agreed cases with the approved strategy, run them, and report:
   your own edit.
 - Don't weaken a test to make it pass.
 - Clean up any data you created outside the test project.
-- Run one heavy command at a time, with filtered output.
+- Run builds and test suites through the heavy-command wrapper named in the brief, one at a time,
+  with filtered output.

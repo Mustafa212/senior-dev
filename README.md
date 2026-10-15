@@ -35,6 +35,13 @@ for work "in phases", "as a senior", or for a review of your branch against a st
 | `agents/reviewer.md` | The blind reviewer. It has read and search tools only, reads the whole change from one frozen diff, and judges against the story |
 | `agents/tester.md` | The blind QA engineer. It designs cases from the story first, then runs them and classifies every failure |
 
+**At the end,** after you've reviewed the work, senior-dev asks one question: commit, push and
+open a pull request to the branch the work started from (GitHub or Azure Repos), and link it to the
+work item. Nothing happens without your yes.
+
+**One heavy command at a time.** Builds and test suites go through `scripts/heavy.sh`, a
+machine-wide lock, so several sessions running in parallel don't stall each other.
+
 Neither agent loads your CLAUDE.md files, so your personal working instructions don't reach them.
 
 ## Modes
