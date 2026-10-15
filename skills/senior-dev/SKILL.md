@@ -108,8 +108,11 @@ depends on them.
 3. **Story.** If the run started with a launch brief (`.ai-session/launch.md`, written by an
    orchestrator such as sprint-pilot), read it first: the story, your tasks, gaps a scout found, the
    branch, the base, the PR target, dependencies and conflicts. Its gaps are a starting point that
-   Phase 1 re-checks, never findings. Record `Base` in the state. If the story is a link, fetch it
-   now. You'll confirm it with the user in Phase 1.
+   Phase 1 re-checks, never findings. Record `Base` in the state. If the brief has a `Source:` line
+   naming an MCP server (one machine can have one per org or account), that server is the run's
+   tracker server: fetch the story and do the PR step's link and state with it, never with another
+   org's server, and record it in the state. If the story is a link, fetch it now. You'll confirm
+   it with the user in Phase 1.
 4. **Docs and rules.** Read the project's own docs (CLAUDE.md, AGENTS.md, and the architecture docs
    or skills the notes point to), and find the project's rules in effect (see `references/story-and-rules.md`).
 5. **Live git state.** Run `git status`, then `git fetch`, and read the live branch:

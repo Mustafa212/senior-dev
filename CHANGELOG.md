@@ -3,6 +3,14 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 1.3.2 — 2026-10-15 (the launch brief names the tracker server)
+- **The brief's `Source:` line picks the tracker server.** A machine can have one MCP server per
+  org or account; a launch brief now says which one the run uses, and senior-dev fetches the story,
+  links the pull request and sets the state with that server only, and records it on the state's
+  `Story:` line so a resumed run uses the same one. For Azure Repos, the pull request goes through
+  the server for the remote's org and carries the work item's id. Why: with several orgs on one
+  machine, the default server could read or write the wrong org.
+
 ## 1.3.1 — 2026-10-15 (Phase 2 gate in Lite; review package scoped to the change set)
 - **No mode skips the Phase 2 gate.** Phase 1's approval never covers the plan; in Lite, Phase 1
   and 2 may share one message with the plan written out in full (effort, models and cost), and one
