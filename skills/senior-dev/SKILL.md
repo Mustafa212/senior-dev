@@ -188,7 +188,9 @@ re-present only the parts that changed.
   reported reason. Then fix the bug and watch the test pass. That gives you the bug's evidence and
   the fix's proof as part of the work itself.
 - **Small steps.** Build after each step or slice, and run the existing tests related to the files
-  you touched, so errors show up while they're still small.
+  you touched, so errors show up while they're still small. Run every build and test suite as
+  `bash "${CLAUDE_PLUGIN_ROOT}/scripts/heavy.sh" <command>`: it lets one heavy command run at a time
+  across every session on the machine, so parallel runs don't stall each other.
 - If you find the plan is wrong, an AC can't be met as written, or the story conflicts with what you
   find in the code or data, stop. Bring the problem and a proposal to the user instead of deviating
   silently. Small mechanical deviations (an extra `using`, a renamed local) are fine; note them in

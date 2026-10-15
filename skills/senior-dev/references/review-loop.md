@@ -41,7 +41,9 @@ adds the new files. Build a fresh package for every review round.
 Heavy jobs run one at a time: when the tests are heavy (a full build, Playwright, an integration
 suite), only one tester executes at a time, it runs one command at a time with filtered output, and
 you don't build while it runs. Agents that build and test side by side stall each other until the
-watchdog kills them.
+watchdog kills them. Heavy commands, yours and the tester's, go through the plugin's
+`scripts/heavy.sh` (its full path is in SKILL.md, Phase 3; put it in the tester brief), which
+serializes them across every session on the machine.
 
 "Blind" means exactly this:
 
