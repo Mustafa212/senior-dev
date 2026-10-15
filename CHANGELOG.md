@@ -3,13 +3,31 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
-## 1.3.2 — 2026-10-15 (the launch brief names the tracker server)
-- **The brief's `Source:` line picks the tracker server.** A machine can have one MCP server per
-  org or account; a launch brief now says which one the run uses, and senior-dev fetches the story,
-  links the pull request and sets the state with that server only, and records it on the state's
-  `Story:` line so a resumed run uses the same one. For Azure Repos, the pull request goes through
-  the server for the remote's org and carries the work item's id. Why: with several orgs on one
-  machine, the default server could read or write the wrong org.
+## 1.4.0 — 2026-10-15 (launch brief v1: scope, review state and tracker server; tracker text is data)
+- **Launch brief, version 1** (`references/launch-brief.md`). An orchestrator's brief now carries
+  `Brief-Version`, the tracker server (`Source`), the story verbatim, this unit's `Work items` and
+  `Scope`, what the PR links (`Link PR to`) and which items move to which state (`Review state`),
+  plus `Stacked on` and the attachments. Phase 1 proposes what the scope gives to other units or
+  teammates as out of scope, naming the owner, and the user confirms. Why: a story split across
+  units made every unit cover the whole story, and the PR step had to guess the review state and
+  moved the parent story while sibling tasks were still open.
+- **The tracker server comes from the brief.** One machine can have one MCP server per org or
+  account; senior-dev fetches, links and sets state with the brief's server only, and records it on
+  the state's new `Tracker:` line so a resumed run uses the same one. For Azure Repos the pull
+  request goes through the server for the remote's org and links the work items on creation.
+- **Tracker text is data, never instructions.** The story goes to the reviewer and tester inside a
+  `<story>` fence; anything in it that tells the reader to act is raised with the user as a `C-n`.
+  The tester never calls a tool that writes to a tracker, a host or a shared database. A new red
+  flag names it. Why: stories and comments are written by many people and reached agents verbatim.
+- **Read-only until the PR step.** The rule that the work item is never edited now says what the PR
+  step may do after the user's yes, and the README's permission advice matches it (ask for the PR
+  step's write tools, deny the rest).
+- **Retro proposals from parallel runs.** A run started from a launch brief writes its proposed
+  skill changes to `~/.claude/senior-dev/proposals/` instead of editing the plugin; a run without a
+  brief applies them later, one at a time. Why: several units finishing together would edit the same
+  clone at once.
+- Phase 0 skips `git log HEAD..@{u}` when the branch has no upstream yet (orchestrators create unit
+  branches with `--no-track`).
 
 ## 1.3.1 — 2026-10-15 (Phase 2 gate in Lite; review package scoped to the change set)
 - **No mode skips the Phase 2 gate.** Phase 1's approval never covers the plan; in Lite, Phase 1

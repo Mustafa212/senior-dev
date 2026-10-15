@@ -7,6 +7,12 @@ and the change would help future runs, improve it. If the user has given standin
 example in their CLAUDE.md), edit the files directly and then tell them what changed. Otherwise,
 propose the change and apply it once they approve.
 
+**Runs started from a launch brief** (several may finish at the same time) never edit the plugin:
+they write each proposed change, with its reason and the evidence, to
+`~/.claude/senior-dev/proposals/<date>-<story id>.md` and say so in the final report. A run without
+a brief applies any waiting proposals during its retro, one at a time, with the same checks as its
+own changes, then deletes each file it applied or rejected.
+
 **Where to edit.** Only in a git clone of the plugin: the folder a local marketplace points to, or
 the user's fork. If the skill runs from the plugin cache (a path under `~/.claude/plugins/cache/`),
 don't edit it there, because the next update overwrites it. Propose the change to the user instead,

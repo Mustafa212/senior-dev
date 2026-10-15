@@ -77,8 +77,13 @@ Each run keeps its state in the repo under `.ai-session/` (make sure it's git-ig
 session, or another AI tool, can resume it from the `NEXT` line.
 
 **Optional extras.** The skill works without them and skips whatever is missing.
-- A work-item MCP (for example `@azure-devops/mcp`) to fetch stories from links. Keep it read-only by
-  denying its write tools in `settings.json`.
+- A work-item MCP (for example `@azure-devops/mcp`) to fetch stories from links. senior-dev reads
+  it, and writes only in the PR step after your yes (the link and the state). In `settings.json`,
+  set the tools that step uses to **ask** and deny the other write tools. For `@azure-devops/mcp`:
+  ask `wit_work_item_write`, `wit_work_item_link_write`, `repo_pull_request_write`; deny
+  `wit_work_item_comment_write`, `repo_pull_request_thread_write`, `repo_create_branch`,
+  `work_iteration_write`, `work_capacity_write`. Permission rules are the real barrier: they apply
+  to the reviewer and tester agents too, and story text is treated as data, never as instructions.
 - A work-log spec at `~/.claude/work-log.md`, for logs somewhere other than `.ai-session/logs/`.
 - A second reviewer from another model family (for example the Codex CLI), for security, money or
   data-integrity changes. It runs only when you approve it in the plan, which says what it sends to

@@ -28,8 +28,10 @@ or "Nothing", means nothing happens.
   `visualstudio.com` → Azure Repos; anything else → no pull request from here.
 - **The description:** the final report's ready-to-paste PR description, written to
   `.ai-session/pr-body.md`. Title: the commit message's first line.
-- **The work item:** the story's id and link, when the run came from a tracker.
-- **The tracker server:** the state's `Story:` server (from the brief's `Source:` line); without
+- **The work items:** from the state's `Tracker:` line (a launch brief's `Link PR to` and
+  `Review state`). Without a brief: the story's id; the review state is the one the local config or
+  the project notes record, or ask for it in the question below.
+- **The tracker server:** the state's `Tracker:` server (from the brief's `Source:` line); without
   one, the work-item MCP the local config names. For Azure Repos, the pull request goes through the
   server for the org in the remote URL (`dev.azure.com/<org>/…` or `<org>.visualstudio.com`): the
   tracker server when its org is that one.
@@ -38,8 +40,9 @@ or "Nothing", means nothing happens.
 
 Set `Waiting: yes — PR step` in the state. Then AskUserQuestion, with the details in the question:
 the files to commit (count and the first few), the commit message, `push origin <branch>`,
-`PR <branch> → <target>` on <host>, and "link to <item> and move it to <review state>" when there
-is a work item and its tracker's MCP server is connected. Options:
+`PR <branch> → <target>` on <host>, and "link to <items>; move <id> to <state>, …" when there are
+work items and their tracker's MCP server is connected (only the items `Review state` names move;
+`none` means no state change). Options:
 
 - **All:** commit, push, pull request, link and state.
 - **Commit and push only**
@@ -61,13 +64,13 @@ Set `Waiting: no` after the answer.
      so, give `https://github.com/<owner>/<repo>/compare/<target>...<branch>`, and stop.
    - Azure Repos: the Azure DevOps MCP server's create-pull-request action (repositories domain,
      for example `repo_pull_request_write` action `create`): source `refs/heads/<branch>`, target
-     `refs/heads/<target>`, the title, the body file's text, draft as chosen, and the work item's
-     id to link it. If the server or its repositories domain isn't available, say so, give
+     `refs/heads/<target>`, the title, the body file's text, draft as chosen, and the `Link PR to`
+     ids as `workItems`, which links them. If the server or its repositories domain isn't available, say so, give
      `<repository URL>/pullrequestcreate?sourceRef=<branch>&targetRef=<target>`, and stop.
    - Any other host: give the branch and the target, and stop.
 4. **Link and state** (All; Draft PR links only): the tracker server links the pull request to
-   the work item (unless step 3 already linked it), then moves the item to the review state. If either isn't available, say so;
-   the pull request stays.
+   each `Link PR to` item step 3 didn't link, then moves each item `Review state` names to its
+   state, and no other item. If either isn't available, say so; the pull request stays.
 
 Record the outcome every time, a stop halfway included: `PR: <url>` (or `none`) in the state, and
 the PR line of the chat report and the delivery log: opened (link), draft (link), committed and

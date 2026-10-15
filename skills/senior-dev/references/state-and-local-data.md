@@ -37,7 +37,8 @@ stands.
 > approved, and treat the story below as the source of truth. The full workflow is the senior-dev
 > plugin's `skills/senior-dev/SKILL.md`, if you can read it. Start from NEXT.
 
-Story: <link or "pasted"> (server: <tracker MCP server, or none>)   Mode: Full | Lite | Review existing   Branch: <branch>
+Story: <link or "pasted">   Mode: Full | Lite | Review existing   Branch: <branch>
+Tracker: <MCP server, or none>   Work items: <ids>   Link PR to: <ids>   Review state: <id → state; …, or none>
 Phase: <n — name>   Last updated: <agent, date time>
 NEXT: <the single next action>
 Waiting: no   Base: <branch the work started from>   PR: none
