@@ -66,4 +66,35 @@ start=$(date +%s)
 bash "$heavy" sleep 2 2>&1 | cat > /dev/null
 check "returns promptly when its output is piped" '[ $(( $(date +%s) - start )) -lt 10 ]'
 
+# 9. A wrapper killed with SIGKILL frees the lock after the stale window (its heartbeat stops).
+HEAVY_LOCK_REFRESH_SECONDS=1 HEAVY_LOCK_STALE_SECONDS=3 bash "$heavy" sleep 30 > /dev/null 2>&1 & w=$!
+sleep 2; kill -9 "$w" 2>/dev/null
+HEAVY_LOCK_STALE_SECONDS=3 timeout 20 bash "$heavy" true 2>/dev/null; code=$?
+check "a wrapper killed with SIGKILL frees the lock" '[ "$code" -eq 0 ]'
+rm -rf "$lock"
+
+# 10. A new lock whose heartbeat is empty (mid-write) is not taken over.
+mkdir -p "$lock"; : > "$lock/heartbeat"; echo "live-holder" > "$lock/owner"
+HEAVY_LOCK_STALE_SECONDS=300 timeout 3 bash "$heavy" true 2>/dev/null; code=$?
+check "an empty heartbeat on a new lock isn't taken over" '[ "$code" -eq 124 ] && [ "$(cat "$lock/owner")" = "live-holder" ]'
+rm -rf "$lock"
+
+# 11. An old lock with a garbage heartbeat is taken over, without breaking the wrapper.
+mkdir -p "$lock"; echo "abc" > "$lock/heartbeat"; echo "ghost" > "$lock/owner"
+touch -d "@$(( $(date +%s) - 1000 ))" "$lock"
+HEAVY_LOCK_STALE_SECONDS=5 timeout 10 bash "$heavy" true 2>/dev/null; code=$?
+check "an old lock with a garbage heartbeat is taken over" '[ "$code" -eq 0 ]'
+rm -rf "$lock"
+
+# 12. An old lock with no heartbeat at all is taken over.
+mkdir -p "$lock"; echo "ghost" > "$lock/owner"
+touch -d "@$(( $(date +%s) - 1000 ))" "$lock"
+HEAVY_LOCK_STALE_SECONDS=5 timeout 10 bash "$heavy" true 2>/dev/null; code=$?
+check "an old lock without a heartbeat is taken over" '[ "$code" -eq 0 ]'
+rm -rf "$lock"
+
+# 13. A command run through heavy.sh can call heavy.sh again without waiting on itself.
+timeout 10 bash "$heavy" bash -c "bash '$heavy' true" 2>/dev/null; code=$?
+check "a nested heavy.sh call doesn't wait on its own lock" '[ "$code" -eq 0 ]'
+
 if [ "$failures" -eq 0 ]; then echo "all heavy.sh tests passed"; else echo "$failures heavy.sh test(s) failed"; exit 1; fi

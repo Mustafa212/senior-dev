@@ -88,7 +88,8 @@ then, not all at once.
   `AGENTS.md` first, then other written rules, else the codebase's consistent conventions. Never
   edit a project's rules without the user's OK.
 - **State:** one file per story under `.ai-session/senior-dev/` plus an index in
-  `.ai-session/STATE.md`. Update `NEXT` **before** each step.
+  `.ai-session/STATE.md`. Update `NEXT` **before** each step, and `Waiting` whenever you stop for
+  the user and once they answer.
 - **Local data:** anything specific to a project, a company or this machine lives in
   `~/.claude/senior-dev/`, never in the plugin.
 
@@ -191,7 +192,10 @@ re-present only the parts that changed.
 - **Small steps.** Build after each step or slice, and run the existing tests related to the files
   you touched, so errors show up while they're still small. Run every build and test suite as
   `bash "${CLAUDE_PLUGIN_ROOT}/scripts/heavy.sh" <command>`: it lets one heavy command run at a time
-  across every session on the machine, so parallel runs don't stall each other.
+  across every session on the machine, so parallel runs don't stall each other. Only commands that
+  finish go through it, never a dev server or a watch mode; several commands go as
+  `bash heavy.sh bash -c '<commands>'`. "heavy.sh: waiting for …" means another session is
+  building: give the call a long timeout, or run it in the background, rather than calling it a hang.
 - If you find the plan is wrong, an AC can't be met as written, or the story conflicts with what you
   find in the code or data, stop. Bring the problem and a proposal to the user instead of deviating
   silently. Small mechanical deviations (an extra `using`, a renamed local) are fine; note them in
@@ -285,9 +289,9 @@ before you write the commit message and the PR description.
   and what QA should focus on (anything tests don't cover, COSMETIC changes the tester saw, risky
   areas).
 - A suggested commit message and a ready-to-paste PR description (summary, AC, tests, deploy notes).
-- **PR:** opened (link), draft (link), committed and pushed only, or not opened.
 - **Cleanup:** stop every app, server or emulator this run started (only those). Ask whether to
   keep, promote or delete the throwaway test project, and whether to keep the evidence folder.
+- **PR:** the outcome of the PR step (below).
 - **Skill updates:** what changed in this skill during the run and why, or "none" (see `references/improving.md`).
 - **Delivery log:** where it was saved (a link or a path).
 
@@ -295,9 +299,13 @@ before you write the commit message and the PR description.
 outcome (fixed, rejected and deferred), the tests (counts and location), the files changed, and the
 Deploy & QA notes.
 
-Show the report, then run the PR step (`references/pull-request.md`): one question, and nothing is
-committed, pushed or opened without a yes. Fill in the PR line from its outcome, then mark the
-state file DONE.
+The end of a run, in this order:
+1. Show the report and get the cleanup answers. Tests promoted into the repo join the change set.
+2. Run the PR step (`references/pull-request.md`): one question, and nothing is committed, pushed or
+   opened without a yes.
+3. Write its outcome as the PR line in the chat, the state and the delivery log, so the log
+   carries the pull request's link.
+4. Mark the state file DONE.
 
 ## Delivery log
 

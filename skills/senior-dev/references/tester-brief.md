@@ -20,7 +20,8 @@ Contradictions already resolved by the user: <C-n → decision, or "none">
 Repository: <path>
 Entry points: <commands / queries / endpoints / classes the change exposes>
 Build: <command>. Run app (if needed): <command>. Project check (if any): <command>.
-Heavy commands (builds, test suites): run each as `bash <full path of the plugin's scripts/heavy.sh> <command>`.
+Heavy commands (builds, test suites): run each as `bash <full path of the plugin's scripts/heavy.sh> <command>`,
+only for commands that finish (never the running app or a watch mode), several as `bash <path> bash -c '<commands>'`.
 
 ## Approved test strategy and proof per AC
 <e.g. "tests in the existing <project> test project" / "throwaway xUnit project at

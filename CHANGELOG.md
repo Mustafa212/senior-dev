@@ -10,14 +10,18 @@ numbers. Project-specific learnings live in local notes (see "Local data" in SKI
   instead of proposing a branch). Why: parallel runs launched per story start from a prepared
   worktree.
 - **PR step.** After the final report, one question: All / Commit and push only / Draft PR /
-  Nothing. It stages only the run's change set, respects commit hooks, never forces, opens the pull
-  request on GitHub (`gh`) or Azure Repos (its MCP server), and links the work item. No answer
-  changes nothing. Why: the last manual step of every run was the same commit, push and PR.
+  Nothing. It commits only the run's change set (by path, so anything else already staged stays
+  out), respects commit hooks, never forces, opens the pull request on GitHub (`gh`) or Azure Repos
+  (its MCP server), and links the work item. Work left on the target branch gets a branch first
+  instead of a push to it; a change already committed skips straight to the push; every outcome,
+  a stop halfway included, lands in the chat, the state and the delivery log. No answer changes
+  nothing. Why: the last manual step of every run was the same commit, push and PR.
 - **Heavy-command lock.** Builds and test suites run through `scripts/heavy.sh`, a machine-wide
-  lock with a heartbeat and stale takeover, with self-tests in CI on Linux and Windows. Its
-  heartbeat loop never holds the caller's output open (a test pins it: before that, a piped run
-  waited up to a minute after the command ended). Why: parallel sessions building at once stall
-  each other.
+  lock with a heartbeat and stale takeover, with 16 self-tests in CI on Linux and Windows. The
+  heartbeat is written atomically, stops when the wrapper dies (even by SIGKILL, so the lock goes
+  stale instead of being held forever), and never holds the caller's output open; a lock with a
+  missing or unreadable heartbeat is judged by its folder's age; a command already under the lock
+  can call the wrapper again. Why: parallel sessions building at once stall each other.
 - **State fields** `Waiting`, `Base` and `PR`, which an orchestrator reads to show every run's
   status.
 
