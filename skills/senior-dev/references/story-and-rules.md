@@ -51,10 +51,26 @@ order:
    changed inside a story (see Phase 3). A rule that turns out wrong or missing goes upstream through
    ai-standards' own rule-proposal process (`/ai-standards:propose-rule`), never into the project's
    copy.
-2. **Other written rules:** a committed `CODING_RULES.md`, an `AGENTS.md` or `CLAUDE.md` that
+2. **ai-standards, registered but not adopted:** no such `AGENTS.md`, but
+   `~/.claude/ai-standards/config.md` names a private copy (`Clone:`) where a file
+   `orgs/<org>/projects/<slug>.md` has this repository's remote as its `repo:` (ignore `user@` and a
+   trailing `.git`). The rules in effect are base (`rules/base.md`), the stack's
+   (`rules/stacks/<stack>.md`, from the header's `stack:`; an angular project also has
+   `rules/stacks/typescript.md`), the architecture's for dotnet
+   (`rules/architectures/dotnet-<architecture>.md`, `simple` when the header names none), the org's
+   (`orgs/<org>/rules.md`) and the project's (that file). The rule files contain template syntax
+   (`{{ }}`, `{% %}`): read through it, using the branch for this stack. Thresholds such as
+   `{{ cfg.max_params }}` come from `config/defaults.jinja`, overridden by `orgs/<org>/settings.jinja`.
+   Cite the IDs. A line `- **X-EX-n [exception] → RULE**` replaces that rule for this project: follow the
+   exception. No check command enforces these rules here, so judge `[tool]` rules by review, on new
+   and changed lines only. The latest audit report
+   (`~/.claude/ai-standards/reports/<org>/<slug>/STANDARDS-DEBT.md`) lists the known debt, which is
+   never fixed inside a story. Phase 1's rules line names it, for example
+   `Rules: ai-standards private copy (dotnet, org acme), audit 2026-10-16 — want changes?`.
+3. **Other written rules:** a committed `CODING_RULES.md`, an `AGENTS.md` or `CLAUDE.md` that
    defines rules, and the project's linter, analyzer and formatter configs. Cite their IDs where they
    have them, and treat their check commands like the one above.
-3. **Nothing written:** follow the conventions the codebase already uses consistently (structure,
+4. **Nothing written:** follow the conventions the codebase already uses consistently (structure,
    naming, libraries, patterns, error style). If the ai-standards plugin is installed (its skills,
    such as `ai-standards:onboard`, are listed), say once in Phase 1 that onboarding would give the
    project written rules, as a task of its own, never inside a story.
