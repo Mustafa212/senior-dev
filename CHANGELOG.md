@@ -3,6 +3,16 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 1.7.0 — 2026-10-16 (second reviewer through the Codex plugin; per-AC table in the PR)
+- **Second reviewer:** with OpenAI's Codex plugin for Claude Code installed, it runs as
+  `/codex:adversarial-review` (read-only) with the filled brief as its focus text; the Codex CLI
+  stays the fallback. Why: the plugin is maintained by OpenAI and takes the brief, so the review
+  stays tied to the story without a hand-kept command.
+- **PR description:** one row per acceptance criterion with its status (addressed, not addressed,
+  unclear) and evidence. Why: whoever reviews the pull request sees each criterion at a glance.
+- **README:** says what sets senior-dev apart from other gated workflows (an independent blind
+  tester, both approval gates, Azure DevOps as well as GitHub, the machine-wide heavy lock).
+
 ## 1.6.0 — 2026-10-16 (stricter triage, fresh evidence, a leaner SKILL.md)
 These changes were found by comparing how our skill files are written with comparable open-source
 skills and Anthropic's own plugins and docs. The wording is our own.

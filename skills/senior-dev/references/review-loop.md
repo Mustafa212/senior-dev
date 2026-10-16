@@ -68,7 +68,10 @@ serializes them across every session on the machine.
 - **Second reviewer** (optional; only when the plan proposed it and the user approved it, for
   security, money or data-integrity changes): send the same filled brief, with the body of
   `agents/reviewer.md` above it, to a reviewer from a different model family, if one is configured.
-  For example, with the Codex CLI: `codex exec -s read-only -C <repo> -o
+  With OpenAI's Codex plugin for Claude Code installed (`codex-plugin-cc`): run
+  `/codex:adversarial-review --base <base> --wait` with that text as its focus text (it is
+  read-only), and save the result to `.ai-session/evidence/round-<n>/second-review.md`. Without
+  the plugin, the Codex CLI: `codex exec -s read-only -C <repo> -o
   .ai-session/evidence/round-<n>/second-review.md -`, with the prompt on stdin, run in the
   background. The local config records the exact command. Its findings go through the same triage,
   and a different model family doesn't share Claude's blind spots.

@@ -12,6 +12,16 @@ The reviewer and the tester are separate agents that never see the implementer's
 can't inherit its blind spots. "Done" needs evidence (a build, a test run, a test seen failing
 without its fix), never a claim.
 
+**Why this one.** Gated, spec-first workflows exist (BMAD, Superpowers, Anthropic's feature-dev).
+senior-dev's differences:
+- **An independent blind tester**, not only a reviewer: it designs cases from the story before
+  running anything, and proves each test fails without its fix.
+- **Your approval at both gates**, the acceptance criteria and the plan with its cost; nothing runs
+  ahead of you.
+- **Azure DevOps as well as GitHub:** work items from the Azure DevOps MCP, pull requests on Azure
+  Repos linked to the work item, tracker text treated as data.
+- **Parallel sessions that don't fight:** one heavy build or test run at a time across the machine.
+
 `skills/senior-dev/SKILL.md` is written for Claude. This file is for you.
 
 ## Install
@@ -88,7 +98,8 @@ session, or another AI tool, can resume it from the `NEXT` line.
   `work_iteration_write`, `work_capacity_write`. Permission rules are the real barrier: they apply
   to the reviewer and tester agents too, and story text is treated as data, never as instructions.
 - A work-log spec at `~/.claude/work-log.md`, for logs somewhere other than `.ai-session/logs/`.
-- A second reviewer from another model family (for example the Codex CLI), for security, money or
+- A second reviewer from another model family (OpenAI's Codex plugin for Claude Code, or the Codex
+  CLI), for security, money or
   data-integrity changes. It runs only when you approve it in the plan, which says what it sends to
   that vendor.
 - Standing permission, in `~/.claude/CLAUDE.md`, for Claude to improve the skill in your clone of
