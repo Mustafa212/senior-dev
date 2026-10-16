@@ -52,7 +52,9 @@ never mid-run, so one run never mixes two versions of the workflow.
    example `grep -rniwE "$(ls ~/.claude/senior-dev/projects | paste -sd'|')" <plugin root>`, and
    for hosts, paths, org names and ticket numbers you saw during the run.
 2. Every file that `SKILL.md` and the references point to exists.
-3. `SKILL.md` stays under 500 lines.
+3. `SKILL.md` stays under about 3,300 words (`wc -w`, frontmatter included), with the hard gates
+   and the excuse table in its first 100 lines. After a compaction only the start of the skill is
+   kept, so a line count isn't enough, and what a long run needs last has to sit near the top.
 4. The core principles below are all still stated.
 5. When the change alters behavior (a gate, a rule for the agents), run one scenario that would
    have failed before the change on a fresh subagent with the changed text, and check that it now

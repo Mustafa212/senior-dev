@@ -3,6 +3,44 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 1.6.0 — 2026-10-16 (stricter triage, fresh evidence, a leaner SKILL.md)
+These changes were found by comparing how our skill files are written with comparable open-source
+skills and Anthropic's own plugins and docs. The wording is our own.
+- **Triage needs proof.** A ❌ now names what disproves the specific claim; a true fact about the
+  surrounding code doesn't count. A finding you can't settle from the code goes to the tester as a
+  scenario or to a run of your own, and if it stays open it's deferred with the check that would
+  settle it. A defect this change caused is never deferred. Why: a reason merely next to the
+  finding could close it, "can't tell" was forced into ✅ or ❌, and "out of scope" could park a bug
+  the change itself introduced.
+- **The triager owns severity.** It is set from the verified consequence on the reviewer's scale;
+  a change from the reviewer's is shown (`major→minor: <why>`), and lowering a blocker or a major
+  needs the same proof as a reject. Why: severity decides whether the loop ends, and nobody owned it.
+- **Coverage lines and incomplete reports are triaged.** Every story or AC line the reviewer marks
+  not met, differs or unclear gets a triage row; an unclear one that can't be settled leaves its AC
+  unproven. A report missing its verdict, a coverage line or a quoted line goes back once, asking
+  only for the missing part. Why: those lines were produced but never acted on.
+- **Reviewer output slots.** Round 2 and later report each earlier fix as FIXED or NOT FIXED with
+  `file:line`, and every review lists unrequested behavior (or "none"). A claim that something is
+  absent needs a repository-wide search, and comments and names in the change count as the author's
+  claims, not evidence. Phase 7 defines a round. Why: without a slot, fix confirmations and scope
+  creep were folded into other findings or left out.
+- **Fresh evidence at the end.** The final report reruns the build and related tests and quotes the
+  counts, and again after promoting tests. The tester shows that each AC's tests appear in the run
+  output, since a test that didn't run proves nothing, and it never computes expected values with
+  the code under test. Why: a filtered or undiscovered test reads as "0 failed".
+- **Done when is a checklist** copied into the final report, each box checked or explained.
+- **Red flags became an excuse table** under the hard gates, naming the thought that comes just
+  before a rule breaks. Lines that only repeated a hard gate were dropped; every other rule is kept.
+- **SKILL.md is leaner: 3,297 words, down from 4,014.** The Lite and Review existing details moved
+  to `references/modes.md`, managed files and baselined debt to `references/story-and-rules.md`,
+  and repeats of `review-loop.md` became pointers. The size check in `improving.md` is now a word
+  budget with the gates near the top. Why: after a compaction only the start of a skill is kept.
+- `review-loop.md` and `state-and-local-data.md` open with a contents line.
+- **Launch brief sections:** the brief's gaps say whether they block the start and who decides, and
+  new sections `Shared with other units` and `Merged before this unit` are read in Phases 0–2. Why:
+  sprint-pilot 1.1.0 writes them, so a unit started later knows what merged and how to treat areas
+  other units share.
+
 ## 1.5.1 — 2026-10-16 (gates near the top; the tester can't start agents)
 - **Hard gates near the top of SKILL.md.** The plan approval, evidence from a run after the last
   edit, contradictions to the user, the 3-round cap, the PR yes, the delivery log and tracker text

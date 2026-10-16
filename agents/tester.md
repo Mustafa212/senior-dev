@@ -52,6 +52,9 @@ The project's rules decide naming, structure and framework. These hold in every 
   action and the check kept apart.
 - **It fails without what it proves:** a test that would still pass with the behavior removed proves
   nothing.
+- **Expected values are independent:** literals from the story, or values you worked out by hand.
+  Never compute them with the code under test or its helpers, because a test that does passes
+  whatever that code does.
 
 ## Step 1: Design (don't write or run tests yet)
 Read the code only as far as you need to know how to call it. Then return this table and stop:
@@ -76,7 +79,9 @@ ambiguity. Don't guess.
 
 ## Step 2: Execute (only when told to proceed)
 Implement the agreed cases with the approved strategy, run them, and report:
-- The commands you ran and the summary output (pass/fail counts).
+- The commands you ran and their summary output (run, passed, failed, skipped). Per AC, name the
+  tests that prove it and show that they appear in that output. A test that didn't run (filtered
+  out, skipped, not discovered, or 0 run) proves nothing.
 - **Per AC, both dimensions:**
 
   | AC | Behavior (the actual outcome: state / data / response) | UI (what the user sees, if in scope) | Verdict |

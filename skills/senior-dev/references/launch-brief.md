@@ -23,5 +23,13 @@ recognize, and ask about the rest.
 | `Depends on:`, `Conflicts:` | Units whose work this one needs, or shares files with. Name them in the plan's risks. |
 | `Attachments:` | `name (id)` for each. In Phase 0, download them with the `Source:` server into `.ai-session/attachments/` (for Azure DevOps: `wit_work_item_attachment`, `savePath: .ai-session/attachments`, a relative path). Confirm in Phase 1 that you read them. |
 
-The brief's **Gaps** table is a starting point that Phase 1 re-checks, never findings. Its
-**Touched areas** are an estimate.
+The brief's sections (headings, not fields):
+- **Gaps:** a starting point that Phase 1 re-checks against the tracker as it is now (the heading
+  dates them), never findings. A gap marked as blocking the start is answered before Phase 2, and
+  each question goes to whoever its row names under "Who decides". "Settled by the code" lines are
+  confirmed, not asked; "Out of scope (per the story)" seeds Phase 1's Out of scope, with `Scope:`.
+- **Touched areas:** an estimate, on the base commit its heading names.
+- **Shared with other units:** follow its rule in Phase 2 and while implementing, name the other
+  unit in the plan's risks, and ask the user before changing more in those areas.
+- **Merged before this unit** (a unit launched after others merged): in Phase 0, read those pull
+  requests and files as the code this unit builds on, and re-check the touched areas against them.

@@ -2,6 +2,8 @@
 
 *senior-dev reference. Read it in Phase 5 before dispatching agents, and in Phase 7 before triage.*
 
+Contents: Dispatching (Phases 5 + 6) · Triage and loop (Phase 7) · Final review across slices
+
 ## Dispatching blind review and tests (Phases 5 + 6)
 
 Dispatch the plugin's agents with the Agent tool: `senior-dev:reviewer` and `senior-dev:tester`,
@@ -86,14 +88,35 @@ serializes them across every session on the machine.
 
 ## Triage and loop (Phase 7)
 
-Collect the reviewers' findings and the test failures, and **don't apply them blindly**. Reviewers
-raise false positives and testers write wrong tests. First locate each finding by its quoted line (a
-quick grep). If the quote doesn't match, read the `file:line` it names, and discard the finding only
-if the problem isn't there. Then check each remaining item against the actual code, and decide:
+Collect the reviewers' findings and coverage lines and the test failures, and **don't apply them
+blindly**. Reviewers raise false positives and testers write wrong tests.
 
-- ✅ **Fix:** the issue is real and in scope.
-- ❌ **Reject:** give a concrete reason, for example "contradicts the project's architecture rule X".
-- ⏸ **Defer:** the issue is real but out of scope; record it as a follow-up.
+**Incomplete report.** If a report lacks its Verdict, a coverage line, or a finding's Quoted line,
+send it back once with SendMessage, asking only for the missing part. Don't fill it in yourself. If
+it comes back incomplete again, triage what you have and note the gap.
+
+**Locate, then verify.** Find each finding by its quoted line (a quick grep). If the quote doesn't
+match, read the `file:line` it names, and discard the finding only if the problem isn't there. At
+that spot, ask whether the harm it describes actually happens, and follow the callers and guards
+until you can answer yes or no.
+
+**Coverage lines and earlier findings.** Every story or AC line the reviewer marked `not met`,
+`differs` or `unclear` gets a row too, settled from the tester's evidence or a check of your own; an
+`unclear` you can't settle leaves that AC unproven. In round 2 and later, a previous finding the
+reviewer reports NOT FIXED is open again.
+
+Then decide:
+
+- ✅ **Fix:** the harm is real and in scope: this change caused or exposed it, or the story asks for
+  it.
+- ❌ **Reject:** you checked, and the harm doesn't happen. The reason names what disproves this
+  particular claim; a true fact about the surrounding code that leaves the claim standing doesn't
+  count. A finding that is out of scope by a user decision is also ❌, citing that decision.
+- ⏸ **Defer:** real, but it was there before this change and is out of scope; record it as a
+  follow-up. A defect this change caused is never deferred.
+- **Can't tell from the code:** don't guess ✅ or ❌. Give it to the tester as a scenario, or settle it
+  with a run of your own. If it's still open after that, defer it with the check that would settle
+  it.
 - ❓ **Ask the user:** any contradiction the reviewer or tester reports between the story and the
   code, the data or the AC. If the story and your AC disagree, your AC is the likely misreading, so
   say so and let the user confirm the fix.
@@ -116,6 +139,11 @@ Show the user one triage table:
 | # | Source (reviewer / second reviewer / tester) | Severity or class | Finding | Decision (✅ ❌ ⏸ ❓) | Reason |
 |---|---|---|---|---|---|
 
+**The severity is yours.** Set it from the consequence you verified, on the reviewer's scale
+(`agents/reviewer.md`). When it differs from the reviewer's, show both, for example
+`major→minor: <why>`. Lowering a blocker or a major needs the same proof as a reject, because
+severity decides whether the loop can end.
+
 Put every ❓ into a single message, using AskUserQuestion for discrete choices, rather than asking
 one at a time. Go ahead with the blocker and major fixes. If a fix would change the approved plan,
 an AC, or a product decision, ask first. If the reviewer proposes a fundamentally different approach
@@ -124,8 +152,8 @@ and you agree it's clearly better, treat that as a plan change and let the user 
 **Size the next round to what changed:**
 - Fix → build → rerun **every** test related to the touched files, not only the ones that failed,
   so a fix that breaks something else shows up immediately.
-- If the round found only minor issues and nits, and every test passed, fix them and stop. A
-  re-review adds nothing when no behavior changed.
+- If the round found only minor issues and nits (by your triaged severity), and every test passed,
+  fix them and stop. A re-review adds nothing when no behavior changed.
 - Otherwise, re-review with a **fresh** reviewer, scoped to what changed since the last round
   (including the tests the tester added), together with the previous findings so it can confirm each
   fix. Give it the rejected findings and their reasons too; it raises one again only with new

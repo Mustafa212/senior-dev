@@ -2,6 +2,9 @@
 
 *senior-dev reference. Read it in Phase 0 (steps 1–2) and whenever you write the state or project notes.*
 
+Contents: State file (where it lives, when to write, template, resuming) · Local data (folders,
+finding the project, recording and pruning notes)
+
 ## State file
 
 The state lets the work continue anywhere: after a crash, in a new session, or in another program
