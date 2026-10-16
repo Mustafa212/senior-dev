@@ -48,9 +48,9 @@ order:
    are the contract: cite their IDs. Rules marked `[tool]` are enforced by the project's check
    command, so they apply to new and changed lines even where old code breaks them, and that command
    is part of the Phase 3 gate and the done criteria. Managed files and baselined debt are never
-   changed inside a story (see Phase 3). A rule that turns out wrong or missing goes upstream through
-   ai-standards' own rule-proposal process (`/ai-standards:propose-rule`), never into the project's
-   copy.
+   changed inside a story (see "In every case" below). A rule that turns out wrong or missing goes
+   upstream through ai-standards' own rule-proposal process (`/ai-standards:propose-rule`), never
+   into the project's copy.
 2. **ai-standards, registered but not adopted:** no such `AGENTS.md`, but
    `~/.claude/ai-standards/config.md` names a private copy (`Clone:`) where a file
    `orgs/<org>/projects/<slug>.md` has this repository's remote as its `repo:` (ignore `user@` and a
@@ -80,6 +80,11 @@ In every case:
   error handling, resource cleanup) apply to new and changed code even where old code breaks them.
 - Change only what the task needs: no drive-by refactors and no reformatting of untouched code.
   Only new and changed lines are judged; violations in untouched code are notes, not findings.
+- **Managed files and baselined debt.** If a hook or the project rules block edits to managed files
+  (lint and test configs, CI, generated instruction files) and the plan needs one changed, raise it
+  as a `C-n`; the change goes upstream, never around the block. Baselined lint debt (a suppressions
+  file, baseline `noqa` comments) is never paid inside a story and never grown; list it as a
+  follow-up.
 - Phase 1 shows the rules in effect as one line, for example
   `Rules: AGENTS.md (ai-standards, dotnet) — want changes?`, without waiting on a separate answer.
 - Never edit a project's rules, or the files that generate them, without the user's OK. Propose

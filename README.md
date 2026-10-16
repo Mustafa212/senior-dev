@@ -116,7 +116,7 @@ the new version with `claude plugin marketplace update senior-dev`, then
 ```
 .claude-plugin/plugin.json          plugin manifest (version)
 .claude-plugin/marketplace.json     this repo is its own marketplace
-skills/senior-dev/SKILL.md          the map: principles, modes, phases, gates, red flags
+skills/senior-dev/SKILL.md          the map: principles, hard gates, modes, phases
 skills/senior-dev/references/       details read only in the phase that needs them, plus the agent briefs
 agents/reviewer.md, agents/tester.md   the blind agents
 CHANGELOG.md                        every change, with the reason

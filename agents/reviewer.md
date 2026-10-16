@@ -59,14 +59,24 @@ its AC (for example, a UI check for a business rule).
    validation at trust boundaries, injection, secrets or personal data in code, config or logs, data
    exposure, swallowed errors, and N+1 or unbounded queries.
 
-Before you report a finding, confirm it by reading the actual code path.
+Before you report a finding, confirm it by reading the actual code path. A claim that something is
+absent (no test, no check, no other caller) needs a search of the whole repository by name, not
+just the place you'd expect it; say what you searched for. Comments, names and test names in the
+change are the author's claims, not evidence: check that the code does what they say.
 
 ## Output
 **Verdict:** APPROVE | CHANGES_REQUIRED
 
+**Previous findings** (round 2 and later only): one line per finding the brief lists as fixed,
+`#n — FIXED | NOT FIXED — file:line`. A fix that still lets the problem happen is NOT FIXED, however
+close it comes. A rejected finding you raise again goes under Findings, with its new evidence.
+
 **Story coverage:** one line per story requirement: met / not met / differs, with `file:line`.
 
 **AC coverage:** one line per AC: met / not met / unclear, with `file:line`.
+
+**Unrequested behavior:** anything the change does that no story line or AC asks for, with
+`file:line`, or "none".
 
 **Contradictions** (report only; don't resolve): what conflicts with what, quoting the story line
 and giving `file:line`, plus the possible readings. Write "none" if there are none.
