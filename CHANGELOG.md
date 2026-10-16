@@ -36,6 +36,10 @@ skills and Anthropic's own plugins and docs. The wording is our own.
   and repeats of `review-loop.md` became pointers. The size check in `improving.md` is now a word
   budget with the gates near the top. Why: after a compaction only the start of a skill is kept.
 - `review-loop.md` and `state-and-local-data.md` open with a contents line.
+- **Launch brief sections:** the brief's gaps say whether they block the start and who decides, and
+  new sections `Shared with other units` and `Merged before this unit` are read in Phases 0–2. Why:
+  sprint-pilot 1.1.0 writes them, so a unit started later knows what merged and how to treat areas
+  other units share.
 
 ## 1.5.1 — 2026-10-16 (gates near the top; the tester can't start agents)
 - **Hard gates near the top of SKILL.md.** The plan approval, evidence from a run after the last
