@@ -27,7 +27,9 @@ or "Nothing", means nothing happens.
 - **The host,** from `git remote get-url origin`: `github.com` → GitHub; `dev.azure.com` or
   `visualstudio.com` → Azure Repos; anything else → no pull request from here.
 - **The description:** the final report's ready-to-paste PR description, written to
-  `.ai-session/pr-body.md`. Title: the commit message's first line.
+  `.ai-session/pr-body.md`. Title: the commit message's first line. It holds one table row per
+  acceptance criterion, `| AC | Addressed / Not addressed / Unclear | Evidence |`, so a reviewer of
+  the pull request sees each criterion's status at a glance.
 - **The work items:** from the state's `Tracker:` line (a launch brief's `Link PR to` and
   `Review state`). Without a brief: the story's id; the review state is the one the local config or
   the project notes record, or ask for it in the question below.

@@ -281,7 +281,7 @@ Keep the chat version **short**; the ticket-ready detail goes in the delivery lo
 - **Deploy & QA notes:** migrations in run order, config and environment changes, manual steps,
   and what QA should focus on (anything tests don't cover, COSMETIC changes the tester saw, risky
   areas).
-- A suggested commit message and a ready-to-paste PR description (summary, AC, tests, deploy notes).
+- A suggested commit message and a ready-to-paste PR description (summary, a per-AC table with status and evidence, tests, deploy notes).
 - **Cleanup:** stop every app, server or emulator this run started (only those). Ask whether to
   keep, promote or delete the throwaway test project, and whether to keep the evidence folder.
 - **PR:** the outcome of the PR step (below).
