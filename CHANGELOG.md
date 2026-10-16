@@ -3,6 +3,18 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 1.5.1 — 2026-10-16 (gates near the top; the tester can't start agents)
+- **Hard gates near the top of SKILL.md.** The plan approval, evidence from a run after the last
+  edit, contradictions to the user, the 3-round cap, the PR yes, the delivery log and tracker text
+  as data now sit right after the phase table, and the state rule says to re-read the state file
+  after a compaction. Why: after a compaction Claude Code keeps only the start of a skill (about
+  5,000 tokens), and the done criteria, cap, PR yes and red flags sat past that point.
+- **Done needs runs made after the last edit.** Why: fixes from the last round or promoted tests
+  could land after the last green run.
+- **The tester can't start agents** (`disallowedTools: Agent`) and uses a skill only to drive a
+  tool its brief names. Why: with no tool list it inherited every tool, while its limits were
+  only in prose (the reviewer's are enforced by its tool list).
+
 ## 1.5.0 — 2026-10-15 (rules from an ai-standards private copy)
 - **Rules for registered, not-adopted projects.** When a project has no ai-standards `AGENTS.md` but
   is registered in the user's ai-standards private copy, senior-dev reads its base, stack,
