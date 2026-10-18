@@ -21,7 +21,7 @@ recognize, and ask about the rest.
 | `Stacked on:` | `<branch> @ <commit>`: this branch starts from another unit's work. Its commits aren't yours: the review package and the PR description say so. When that branch merges, the orchestrator offers the rebase. |
 | `Workflow:` | Which workflow the orchestrator started; for you, `senior-dev`. |
 | `Depends on:`, `Conflicts:` | Units whose work this one needs, or shares files with. Name them in the plan's risks. |
-| `Attachments:` | `name (id)` for each. In Phase 0, download them with the `Source:` server into `.ai-session/attachments/` (for Azure DevOps: `wit_work_item_attachment`, `savePath: .ai-session/attachments`, a relative path). Confirm in Phase 1 that you read them. |
+| `Attachments:` | `name (id)` for each. In Phase 0, download them with the `Source:` server into `.ai-session/attachments/` (for Azure DevOps: `wit_work_item_attachment`, `savePath: .ai-session/attachments`, a relative path; for Jira: `downloadJiraIssueAttachment`, `outputPath: .ai-session/attachments/<name>`, then run the `downloadCommand` it returns). Confirm in Phase 1 that you read them. |
 
 The brief's sections (headings, not fields):
 - **Gaps:** a starting point that Phase 1 re-checks against the tracker as it is now (the heading

@@ -3,6 +3,14 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 1.9.2 — 2026-10-18 (Jira as the tracker)
+- **Jira:** the launch brief's attachments download with `downloadJiraIssueAttachment` (it returns
+  a command to run), and the PR step links the pull request with a remote link, checking first
+  that it isn't already there, and moves the state by the transition whose target is the review
+  state. Why: the orchestrator now reads sprints from Jira, and its units had no way to fetch,
+  link or move Jira items; a duplicate remote link can't be removed, and Jira transitions are
+  often named differently from the status they lead to.
+
 ## 1.9.1 — 2026-10-18 (launch brief: two new lines)
 - **Launch brief:** Phase 0 traces the brief's "Already in the code" first and builds on it, and
   "Names fixed by the plan" under Shared with other units are used exactly. Why: the orchestrator
