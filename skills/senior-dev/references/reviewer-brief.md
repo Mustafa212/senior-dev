@@ -15,6 +15,7 @@ Don't add anything about your reasoning, your approach, or where you expect prob
 <AC-1 … AC-n, each with its source line in the story>
 
 Out of scope (decided by the user): <list, or "none">
+Slice: <"the whole story", or: this slice owns AC-x…; later slices own AC-y… (not built yet, so not findings)>
 Contradictions already resolved by the user: <C-n → decision, or "none">
 
 ## Planned proof per AC (the tester is writing these tests now)

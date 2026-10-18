@@ -16,6 +16,7 @@ additions later with SendMessage.
 <AC-1 … AC-n, each with its source line in the story>
 
 Out of scope (decided by the user; don't test these): <list, or "none">
+Slice: <"the whole story", or: this slice owns AC-x…; later slices own AC-y… (not built yet: no cases for them)>
 Contradictions already resolved by the user: <C-n → decision, or "none">
 
 ## How to reach the code

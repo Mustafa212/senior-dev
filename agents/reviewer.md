@@ -73,7 +73,8 @@ close it comes. A rejected finding you raise again goes under Findings, with its
 
 **Story coverage:** one line per story requirement: met / not met / differs, with `file:line`.
 
-**AC coverage:** one line per AC: met / not met / unclear, with `file:line`.
+**AC coverage:** one line per AC: met / not met / unclear, with `file:line`. An AC the brief gives
+to a later slice is "later slice", never a finding.
 
 **Unrequested behavior:** anything the change does that no story line or AC asks for, with
 `file:line`, or "none".

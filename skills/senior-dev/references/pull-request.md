@@ -29,7 +29,10 @@ or "Nothing", means nothing happens.
 - **The description:** the final report's ready-to-paste PR description, written to
   `.ai-session/pr-body.md`. Title: the commit message's first line. It holds one table row per
   acceptance criterion, `| AC | Addressed / Not addressed / Unclear | Evidence |`, so a reviewer of
-  the pull request sees each criterion's status at a glance.
+  the pull request sees each criterion's status at a glance, and a line `Merge danger: <one-way |
+  two-way> door; <blast radius>` taken from the plan's risks and side effects. Anything that sends
+  messages, drops or rewrites data, or stores data in a new format is one-way: reverting the commit
+  doesn't undo it.
 - **The work items:** from the state's `Tracker:` line (a launch brief's `Link PR to` and
   `Review state`). Without a brief: the story's id; the review state is the one the local config or
   the project notes record, or ask for it in the question below.

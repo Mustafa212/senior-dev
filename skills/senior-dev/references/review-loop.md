@@ -17,14 +17,21 @@ from the plugin's `agents/` folder above the brief.
 reviewer reads the same frozen snapshot and none of the diff enters your own context:
 
 ```bash
-B=$(git merge-base <base-branch> HEAD); P=.ai-session/evidence/round-<n>/change.diff
+B=$(git merge-base origin/<base-branch> HEAD) || { echo "no merge base"; exit 1; }
+P=.ai-session/evidence/round-<n>/change.diff
 F=(<the change set: the state's "Files changed", plus tests kept in the repo>)
+[ ${#F[@]} -gt 0 ] || { echo "empty change set"; exit 1; }
 mkdir -p "$(dirname "$P")"
 { git diff --stat "$B" -- "${F[@]}"; git diff "$B" -- "${F[@]}"
   git ls-files --others --exclude-standard -- "${F[@]}" |
     while read -r f; do git diff --no-index -- /dev/null "$f"; done
 } > "$P"
 ```
+
+Use `origin/<base-branch>` after a fetch: the local base branch is often stale or missing, and a
+stale base puts teammates' merged commits into the diff. An empty `F` would diff the whole tree.
+Before dispatching, check that the `--stat` at the top of `$P` lists exactly the change set; if any
+check fails, fix the package and never dispatch a reviewer on it.
 
 `git diff $B` covers the branch's commits and the uncommitted changes to tracked files; the loop
 adds the new files. Limit both to the change set: the working tree can hold someone else's staged

@@ -64,7 +64,8 @@ Read the code only as far as you need to know how to call it. Then return this t
 
 Cover every in-scope requirement in the story, not only the AC: the happy path, boundaries, invalid
 input, authorization and ownership, and every error case or message the story mentions. Every AC
-gets at least the proof level the brief plans for it. Skip what the brief lists as out of scope.
+gets at least the proof level the brief plans for it. Skip what the brief lists as out of scope or
+as a later slice's.
 
 Derive the cases systematically, so they don't depend on what comes to mind:
 - **Input classes and boundaries:** split each input into its valid and invalid classes, and test
@@ -98,7 +99,9 @@ Implement the agreed cases with the approved strategy, run them, and report:
   and check whether the action still produces the right outcome. If it does, the failure is
   COSMETIC. If it doesn't, it's FUNCTIONAL. Give expected vs actual, with `file:line` and evidence
   (output, response, screenshot). Save evidence files under the evidence folder named in the brief
-  and reference them by path.
+  and reference them by path. Evidence ends up in a pull request and a shared log, so redact it:
+  write `<REDACTED>` for every token, cookie, auth header, password, connection string and piece of
+  personal data, and keep only the lines that show the result.
 - **Mutation check** (when the brief asks for it): show that your tests catch a broken
   implementation. Run the mutation tool on the changed code, or, without one, break the logic by hand
   (invert a condition, drop a check), run the tests, and undo your edit. Report which mutations
@@ -112,6 +115,8 @@ Implement the agreed cases with the approved strategy, run them, and report:
   you're testing is uncommitted, and those commands destroy it. Undo a hand mutation by reverting
   your own edit.
 - Don't weaken a test to make it pass.
+- Pass tokens and passwords through environment variables, never as literals in a command or a
+  test file.
 - Clean up any data you created outside the test project.
 - Run builds and test suites through the heavy-command wrapper named in the brief, one at a time,
   with filtered output.

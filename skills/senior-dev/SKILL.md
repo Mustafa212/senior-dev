@@ -92,8 +92,8 @@ This file is the map. Read each reference when its phase starts, not all at once
   `AGENTS.md` first, then other written rules, else the codebase's consistent conventions. Never
   edit a project's rules without the user's OK.
 - **State:** one file per story under `.ai-session/senior-dev/` plus an index in
-  `.ai-session/STATE.md`. Update `NEXT` **before** each step, and `Waiting` whenever you stop for
-  the user and once they answer. After a compaction, or when unsure where you are, re-read the
+  `.ai-session/STATE.md`. Update `NEXT` **before** each step, `Waiting` whenever you stop for the
+  user and once they answer, and `Retro notes` the moment the user corrects you. After a compaction, or when unsure where you are, re-read the
   state file and the current phase's and mode's references, and trust them and git over memory.
 - **Local data:** anything specific to a project, a company or this machine lives in
   `~/.claude/senior-dev/`, never in the plugin.
@@ -121,15 +121,13 @@ Say one line ("reading the code…"), then work through these steps in order.
    duplicating it. Fetch again before Phase 3 and whenever the user mentions new commits. If you're
    on the default branch, Phase 2 proposes a branch.
 6. **Trace the code.** Find the code the task touches and the closest existing feature to follow,
-   then trace the real flow end to end, including the data it reads and writes. When the task
-   depends on schema or existing data, check the real thing read-only (with a DB tool, if one is
-   configured) rather than from entity classes, which drift. When a
-   bug is reported as something a consumer sees (a frontend, another service), find the exact call
-   that consumer makes and how it handles the response before choosing where to fix it, or you may
-   fix endpoints nobody calls.
+   then trace the real flow end to end, including the data it reads and writes: check schema and
+   existing data read-only (a DB tool, if configured), not from entity classes, which drift. For a
+   bug a consumer sees (a frontend, another service), find that consumer's exact call and how it
+   handles the response before choosing where to fix it, or you may fix endpoints nobody calls.
 7. **Bugs need evidence.** Reproduce the bug, or find hard evidence of it (a log, a failing request,
-   a failing test), before Phase 1. If you can't, say so in Phase 1. That evidence becomes the
-   test that later proves the fix.
+   a failing test), and its cause, before Phase 1. If you can't, say so in Phase 1. That evidence
+   becomes the test that later proves the fix.
 8. **Size** the task and recommend a mode (see "Modes").
 
 ## Phase 1 — Align
@@ -153,8 +151,9 @@ your recommendation.
   and the attachments and linked items you read, so the user can spot anything missing.
 - **Context summary:** 3–6 lines of what Phase 0 found: the traced flow as a `file:line` chain
   (`Controller.Action → Handler → Repository`), the feature you'll follow, the branch state (the
-  branch, and any incoming commits that matter), and for a bug, the evidence plus the consumer's
-  exact call, so the user can catch a wrong path early.
+  branch, and any incoming commits that matter), and for a bug, the evidence, the consumer's exact
+  call, the cause you believe with what confirms it, and the causes you ruled out (an unconfirmed
+  cause is a question under Decide), so the user can catch a wrong path early.
 - **Understanding:** 2–4 lines restating the task in your own words.
 - **Acceptance criteria:** `AC-1 … AC-n`, written as Given / When / Then, each citing its story
   source and together covering the error and edge cases that matter. Quote messages, labels and
@@ -192,7 +191,9 @@ this gate. In Lite, Phase 1 and Phase 2 may go in one message, with the plan wri
   the project's architecture skill, `superpowers:test-driven-development` if the user wants TDD,
   and `superpowers:systematic-debugging` for an unclear build or test failure.
 - **Bug fixes start red.** Write the test the plan named first, run it, and watch it fail for the
-  reported reason. Then fix the bug and watch the test pass.
+  reported reason. Then fix the bug, watch the test pass, and rerun the Phase 0 reproduction
+  itself, quoting its result: when the test can't reach the chain that triggered the bug, the plan
+  says so and the reproduction is the proof.
 - **Small steps.** Build after each step or slice, and run the existing tests related to the files
   you touched. Run every build and test suite as
   `bash "${CLAUDE_PLUGIN_ROOT}/scripts/heavy.sh" <command>`: one heavy command at a time across the
@@ -205,26 +206,24 @@ this gate. In Lite, Phase 1 and Phase 2 may go in one message, with the plan wri
   Phase 4.
 - **Gate:** the build passes with the project's real build command (`dotnet build <sln>`,
   `npm run build`, `tsc`, and so on), with no new errors and no new warnings in the files you
-  touched, and the related existing tests pass. If the project defines a full check command (for
-  example in its `AGENTS.md`), that passes too.
+  touched, and the related existing tests pass. A project check command (for example in
+  `AGENTS.md`) passes too.
 - **Self-check, which produces the AC map.** Walk every AC (in the words the user approved) through
   what you built, close the gaps, and note where each AC is implemented. That becomes the AC map in
   Phase 4.
-- Don't commit during the run; the PR step at the end asks. At the end of each slice, offer a ready
-  commit message so the user can checkpoint, in the repo's commit convention (some enforce one with
-  a commit-msg hook).
+- Don't commit during the run; the PR step asks. At the end of each slice, offer a commit message
+  in the repo's convention so the user can checkpoint.
 - Managed files and baselined debt are never changed inside a story (see
   `references/story-and-rules.md`).
 
 ## Phase 4 — Show
 
 - A table of changed files with columns: file | change | why.
-- Excerpts only for the non-obvious parts. If a tool can open a diff view, open it.
+- Excerpts only for the non-obvious parts.
 - The **AC map** from the self-check: where each AC-n is implemented.
 - **Migrations:** the key SQL statements each migration will run. Never apply one to a shared
   database without the user's explicit OK.
-- **Try it yourself:** how the user can see it working, either the endpoint with a ready-made request
-  or the screen and how to get to it.
+- **Try it yourself:** a ready-made request for the endpoint, or the screen and how to reach it.
 - Deviations from the plan, and the results of the build and related tests.
 
 End Phase 4 with one line telling the user they can press Esc to stop and look at the code before
@@ -281,7 +280,7 @@ Keep the chat version **short**; the ticket-ready detail goes in the delivery lo
 - **Deploy & QA notes:** migrations in run order, config and environment changes, manual steps,
   and what QA should focus on (anything tests don't cover, COSMETIC changes the tester saw, risky
   areas).
-- A suggested commit message and a ready-to-paste PR description (summary, a per-AC table with status and evidence, tests, deploy notes).
+- A suggested commit message and a ready-to-paste PR description (summary, per-AC status and evidence, tests, deploy notes, merge danger).
 - **Cleanup:** stop every app, server or emulator this run started (only those). Ask whether to
   keep, promote or delete the throwaway test project, and whether to keep the evidence folder.
 - **PR:** the outcome of the PR step (below).
@@ -297,8 +296,7 @@ Without one, save it as `.ai-session/logs/<date>-<feature>.md`.
 The end of a run, in this order:
 1. Show the report and get the cleanup answers. Tests promoted into the repo join the change set:
    rerun the build and those tests, and quote the new counts.
-2. Run the PR step (`references/pull-request.md`): one question, and nothing is committed, pushed or
-   opened without a yes.
-3. Write its outcome as the PR line in the chat, the state and the delivery log, so the log
-   carries the pull request's link.
+2. The PR step (`references/pull-request.md`): one question; nothing is committed, pushed or opened
+   without a yes.
+3. Its outcome goes in the chat's PR line, the state and the delivery log.
 4. Mark the state file DONE.
