@@ -3,6 +3,33 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 1.9.0 — 2026-10-18 (redacted evidence, slice-aware agents, proofs that reach the bug)
+- **Redacted evidence:** the tester writes `<REDACTED>` for tokens, cookies, auth headers,
+  passwords, connection strings and personal data in saved evidence, and passes credentials through
+  environment variables. Why: evidence goes into the pull request and a shared log.
+- **Slices in the briefs:** both briefs say which AC this slice owns and which belong to later
+  slices; the reviewer marks those "later slice" and the tester writes no cases for them. Why: a
+  first slice's round reported the later slices' AC as blockers and failures.
+- **A bug fix reruns the original reproduction:** after the red test turns green, the Phase 0
+  reproduction runs again and its result is quoted; when the test can't reach the chain that
+  triggered the bug, the plan says so. Why: a shallow test can go red then green while the reported
+  call still fails.
+- **Vertical slices:** each slice is a thin path through every layer its AC need, never one slice
+  per layer, and a refactor the story needs goes first as its own slice. Why: a one-layer slice has
+  no AC it can prove.
+- **A checked review package:** built from `origin/<base>` after a fetch, it stops when the merge
+  base doesn't resolve or the change set is empty, and its `--stat` must list exactly the change
+  set. Why: a stale local base put teammates' merged commits in front of the reviewer.
+- **The cause of a bug in Phase 1:** the context summary states the believed cause with what
+  confirms it and the causes ruled out; an unconfirmed cause is a question. Why: the user approved
+  plans built on a cause that was never written down.
+- **Retro notes:** the state file gets a line the moment the user corrects or repeats something, or
+  a step wastes time, and the retro answers only from those lines. Why: by the end of a long run
+  the middle is forgotten and the retro drifts into generic advice.
+- **Merge danger in the PR:** one-way or two-way door and the blast radius, from the plan's risks.
+  Why: reverting a commit doesn't unsend messages or restore dropped data.
+- Shorter wording in Phases 0, 3 and 4 and the end of a run, to keep SKILL.md within its budget.
+
 ## 1.8.0 — 2026-10-18 (Phase 1 in rounds, a mockup for look and feel)
 - **Phase 1 rounds:** at most 4 questions per round, and answers that open new decisions get the
   next round, after which only the changed AC are shown. Why: a single round left the decisions an

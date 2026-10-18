@@ -20,8 +20,11 @@ as an issue or a pull request to the plugin's repository. Make the changes on a 
 other users through a pull request, never by a direct push to `main`.
 
 **Retro at the end of every run** (about a minute, before the final report). Answer three
-questions: What did the user correct, or have to ask twice? What wasted time? What did you have to
-rediscover? Each answer becomes a skill change, a line in the project's notes, or "none". Their
+questions from the state's `## Retro notes`, written as things happened, not from memory: by the end
+of a long run the middle is forgotten, and memory invents generic advice. What did the user
+correct, or have to ask twice? What wasted time? What did you have to rediscover? Each answer cites
+a note and becomes a skill change, a line in the project's notes, or "none"; drop any lesson you
+can't trace to a note. Their
 outcome is the "Skill updates" line of the final report. Change the skill only at the end of a run,
 never mid-run, so one run never mixes two versions of the workflow.
 

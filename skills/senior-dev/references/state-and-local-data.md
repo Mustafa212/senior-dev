@@ -55,6 +55,8 @@ Waiting: no   Base: <branch the work started from>   PR: none
                    taken before the tester executes
 ## Rounds           per round: findings → decisions, fixes, test results
 ## Evidence         paths under .ai-session/evidence/
+## Retro notes      one line the moment the user corrects you or repeats a request, or a step
+                   wastes time: what happened, and what would have avoided it
 ```
 
 **Resuming.** In Phase 0, read the index and list the unfinished runs. If one matches the story,
