@@ -3,6 +3,18 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 1.8.0 — 2026-10-18 (Phase 1 in rounds, a mockup for look and feel)
+- **Phase 1 rounds:** at most 4 questions per round, and answers that open new decisions get the
+  next round, after which only the changed AC are shown. Why: a single round left the decisions an
+  answer opened to be guessed during implementation.
+- **Least-sure recommendation:** the line offering a single "approve" names the recommendation the
+  agent is least sure of. Why: one approve over every recommendation invites nodding along; naming
+  the weakest one points the user at the decision that needs them.
+- **Look and feel:** a question about how a screen should look or feel gets a throwaway mockup,
+  outside the repository, instead of more questions. Why: talking can't settle it, and the
+  rephrased questions grow the scope.
+- Shorter wording for the state and heavy-command lines, to keep SKILL.md within its word budget.
+
 ## 1.7.0 — 2026-10-16 (second reviewer through the Codex plugin; per-AC table in the PR)
 - **Second reviewer:** with OpenAI's Codex plugin for Claude Code installed, it runs as
   `/codex:adversarial-review` (read-only) with the filled brief as its focus text; the Codex CLI

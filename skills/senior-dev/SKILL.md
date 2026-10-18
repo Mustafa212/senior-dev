@@ -70,9 +70,8 @@ Recommend a mode in Phase 0, once you've sized the task. The user decides.
 | **Lite** | trivial: about 10 lines, one file, no branching logic | one blind review and no tester |
 | **Review existing** | the user already implemented the story and wants it checked ("خلصت، بص على الـ changes") | the change set is their work, and Phase 2 becomes a fix list |
 
-Before you recommend Lite, or when the request is to review code the user already wrote, read
-`references/modes.md`. Every mode keeps the Phase 1 and 2 gates, the story as source of truth, and
-a blind review.
+Read `references/modes.md` before you recommend Lite or review the user's own code. Every mode
+keeps the Phase 1 and 2 gates, the story as source of truth, and a blind review.
 
 ## Where the details live
 
@@ -94,9 +93,8 @@ This file is the map. Read each reference when its phase starts, not all at once
   edit a project's rules without the user's OK.
 - **State:** one file per story under `.ai-session/senior-dev/` plus an index in
   `.ai-session/STATE.md`. Update `NEXT` **before** each step, and `Waiting` whenever you stop for
-  the user and once they answer. After a compaction, or whenever you're unsure where you are,
-  re-read the state file and the references for the current phase and mode before the next step,
-  and trust them and git over your memory.
+  the user and once they answer. After a compaction, or when unsure where you are, re-read the
+  state file and the current phase's and mode's references, and trust them and git over memory.
 - **Local data:** anything specific to a project, a company or this machine lives in
   `~/.claude/senior-dev/`, never in the plugin.
 
@@ -139,8 +137,9 @@ Say one line ("reading the code…"), then work through these steps in order.
 Put the user's decisions first and the reference material after, so the user can answer quickly.
 
 **Decide** (top)
-- **Questions:** only questions whose answers change the implementation, at most 4. Don't ask
-  anything the code can answer.
+- **Questions:** only questions whose answers change the implementation, at most 4 per round. Don't
+  ask anything the code can answer. Look and feel can't be settled by talking: offer a throwaway
+  mockup, outside the repository, and ask about that.
 - **Contradictions and gaps:** each `C-n` with your recommendation (see `references/story-and-rules.md`). If there are none, say so explicitly.
 - **Approaches:** only when there's a real choice: 2–3 options with trade-offs, and your
   recommendation.
@@ -167,8 +166,10 @@ your recommendation.
   what its `Scope` gives to other units or teammates, naming who owns each part.
 
 End with one line telling the user that a single "approve", in their language, accepts all your
-recommendations. Wait for that, or for a decision on every question and every C-n. From here on the
-AC are the contract for review, tests and the finish line.
+recommendations; name the one you're least sure of. Wait for that, or for a decision on every
+question and every C-n. Answers that open new decisions get the next round (at most 4), then show
+only what changed in the AC. From here on the AC are the contract for review, tests and the finish
+line.
 
 ## Phase 2 — Plan
 
@@ -194,11 +195,10 @@ this gate. In Lite, Phase 1 and Phase 2 may go in one message, with the plan wri
   reported reason. Then fix the bug and watch the test pass.
 - **Small steps.** Build after each step or slice, and run the existing tests related to the files
   you touched. Run every build and test suite as
-  `bash "${CLAUDE_PLUGIN_ROOT}/scripts/heavy.sh" <command>`, which runs one heavy command at a time
-  across every session on the machine. Only commands that finish go through it, never a dev server
-  or a watch mode; several commands go as `bash heavy.sh bash -c '<commands>'`. "heavy.sh: waiting
-  for …" means another session is building: give the call a long timeout or run it in the
-  background; it isn't a hang.
+  `bash "${CLAUDE_PLUGIN_ROOT}/scripts/heavy.sh" <command>`: one heavy command at a time across the
+  machine, never a dev server or a watch mode; several go as `bash heavy.sh bash -c '<commands>'`.
+  "heavy.sh: waiting for …" is another session building, not a hang: use a long timeout or the
+  background.
 - If you find the plan is wrong, an AC can't be met as written, or the story conflicts with what you
   find in the code or data, stop. Bring the problem and a proposal to the user instead of deviating
   silently. Small mechanical deviations (an extra `using`, a renamed local) are fine; note them in
