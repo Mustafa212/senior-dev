@@ -76,6 +76,10 @@ Set `Waiting: no` after the answer.
 4. **Link and state** (All; Draft PR links only): the tracker server links the pull request to
    each `Link PR to` item step 3 didn't link, then moves each item `Review state` names to its
    state, and no other item. If either isn't available, say so; the pull request stays.
+   Jira: link with `createJiraIssueRemoteIssueLink` (the PR's URL and title) only after
+   `listJiraIssueRemoteIssueLinks` shows it isn't there (a second call adds a duplicate that can't
+   be removed); move with `listJiraIssueTransitions`, then `transitionJiraIssue` with the
+   transition whose target status is the review state, since a transition's name can differ.
 
 Record the outcome every time, a stop halfway included: `PR: <url>` (or `none`) in the state, and
 the PR line of the chat report and the delivery log: opened (link), draft (link), committed and
