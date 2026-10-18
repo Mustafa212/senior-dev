@@ -28,8 +28,10 @@ The brief's sections (headings, not fields):
   dates them), never findings. A gap marked as blocking the start is answered before Phase 2, and
   each question goes to whoever its row names under "Who decides". "Settled by the code" lines are
   confirmed, not asked; "Out of scope (per the story)" seeds Phase 1's Out of scope, with `Scope:`.
+  "Already in the code" is where Phase 0 traces first: build on that code, never beside it.
 - **Touched areas:** an estimate, on the base commit its heading names.
 - **Shared with other units:** follow its rule in Phase 2 and while implementing, name the other
-  unit in the plan's risks, and ask the user before changing more in those areas.
+  unit in the plan's risks, and ask the user before changing more in those areas. Use its "Names
+  fixed by the plan" exactly; needing a different one is a question for the user.
 - **Merged before this unit** (a unit launched after others merged): in Phase 0, read those pull
   requests and files as the code this unit builds on, and re-check the touched areas against them.
