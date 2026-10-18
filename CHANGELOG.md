@@ -3,6 +3,12 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 1.9.1 — 2026-10-18 (launch brief: two new lines)
+- **Launch brief:** Phase 0 traces the brief's "Already in the code" first and builds on it, and
+  "Names fixed by the plan" under Shared with other units are used exactly. Why: the orchestrator
+  now writes both lines, and a unit that ignored them would rebuild existing behavior or rename a
+  field another unit depends on.
+
 ## 1.9.0 — 2026-10-18 (redacted evidence, slice-aware agents, proofs that reach the bug)
 - **Redacted evidence:** the tester writes `<REDACTED>` for tokens, cookies, auth headers,
   passwords, connection strings and personal data in saved evidence, and passes credentials through
