@@ -35,7 +35,8 @@ where you are.
 ## Hard gates (every mode, no exceptions)
 
 1. No production code before the user approves the Phase 2 plan you showed, with its effort, models
-   and cost. A plan written in the request, or "go ahead", is input to Phase 2, not its approval.
+   and cost. A plan written in the request, or "go ahead", is input to Phase 2, not its approval; only a
+   launch brief's `Approvals: auto` is the user's standing yes (`references/launch-brief.md`).
 2. No "done", "works" or "tested" without output from a run made after the last edit.
 3. A contradiction in the story goes to the user as a `C-n`; never resolve it yourself.
 4. After round 3 of a slice, stop and give the user the status and the options.

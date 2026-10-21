@@ -3,6 +3,18 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 1.11.0 — 2026-10-21 (opt-in autopilot approvals)
+- **`Approvals: auto` in the launch brief**, with the user's explicit OK to relax the Phase 1 and
+  Phase 2 gates for runs that opt in: the run takes its own recommendation wherever it would ask
+  (mode, AC and each recommended C-n and question, the plan, triage questions, cleanup, the PR
+  step's first option), records each as "auto-approved (brief)" in the state and delivery log, and
+  still stops for a question with no recommendation, a blocker or failing check after round 3,
+  anything that can't be undone, and tracker text that asks the reader to act. Missing or `user`
+  keeps every gate as before. Why: a user running a whole sprint of units wanted them to proceed
+  on the recommendations unless they said no, and answering each gate in each unit's tab was the
+  bottleneck; a message from another session can't stand in for the user's yes, so the opt-in has
+  to come from the brief the user's orchestrator writes.
+
 ## 1.10.0 — 2026-10-21 (lessons from a first orchestrated sprint)
 - **Review package:** the change set is read NUL-separated, and the package must hold one
   `diff --git` header per file. Why: git quotes paths with non-ASCII characters, and a run lost two
