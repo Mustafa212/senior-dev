@@ -3,6 +3,24 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 1.10.0 — 2026-10-21 (lessons from a first orchestrated sprint)
+- **Review package:** the change set is read NUL-separated, and the package must hold one
+  `diff --git` header per file. Why: git quotes paths with non-ASCII characters, and a run lost two
+  files from review because a quoted path matched nothing.
+- **Contradictions:** each option of a `C-n` comes with one concrete example of what it would build.
+  Why: an abstract contradiction needed a second round before the user could answer.
+- **Contract questions:** propose the codebase's existing pattern before asking. Why: a run asked
+  for a response shape the code already settled.
+- **Linked test cases:** fetching a story reads them before a scope recommendation. Why: their
+  titles showed QA would check a displayed value, which reversed a recommendation.
+- **Launch brief `End:` and "Decisions from other units":** `End: push-for-review` or `local` sets the
+  PR step's options (still one question, never skipped); decisions another unit made on shared
+  columns or money paths are treated like fixed names. Why: units told mid-run to push for review
+  without a pull request needed an extra round, and one unit learned a sibling's decision only from
+  that unit's state file.
+- **Build scope:** small steps build the touched projects; the whole solution is for the gate. Why:
+  full-solution builds took minutes per step.
+
 ## 1.9.2 — 2026-10-18 (Jira as the tracker)
 - **Jira:** the launch brief's attachments download with `downloadJiraIssueAttachment` (it returns
   a command to run), and the PR step links the pull request with a remote link, checking first

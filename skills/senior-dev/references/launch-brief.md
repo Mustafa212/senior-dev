@@ -18,6 +18,7 @@ recognize, and ask about the rest.
 | `Link PR to:` | The items the PR step links the pull request to. |
 | `Review state:` | `<id> → <state>` for each item the PR step moves; only those move. `none`: no state change. |
 | `Repo:`, `Branch:`, `Base:`, `PR target:` | The branch already exists and is checked out; Phase 2 shows it instead of proposing one. Record `Base` in the state. The PR targets `PR target`. |
+| `End:` | How the unit ends: `pr` (the PR step as written), `push-for-review` (the user reviews the pushed branch: the PR step's question offers commit and push, with no pull request and no state change) or `local` (commit only). Missing: `pr`. The PR step still asks its one question; the brief only sets its options. |
 | `Stacked on:` | `<branch> @ <commit>`: this branch starts from another unit's work. Its commits aren't yours: the review package and the PR description say so. When that branch merges, the orchestrator offers the rebase. |
 | `Workflow:` | Which workflow the orchestrator started; for you, `senior-dev`. |
 | `Depends on:`, `Conflicts:` | Units whose work this one needs, or shares files with. Name them in the plan's risks. |
@@ -33,5 +34,8 @@ The brief's sections (headings, not fields):
 - **Shared with other units:** follow its rule in Phase 2 and while implementing, name the other
   unit in the plan's risks, and ask the user before changing more in those areas. Use its "Names
   fixed by the plan" exactly; needing a different one is a question for the user.
+- **Decisions from other units:** decisions another unit made that touch the same columns, fields or
+  money paths. Treat them like "Names fixed by the plan"; code that doesn't match one is a question
+  for the user.
 - **Merged before this unit** (a unit launched after others merged): in Phase 0, read those pull
   requests and files as the code this unit builds on, and re-check the touched areas against them.
