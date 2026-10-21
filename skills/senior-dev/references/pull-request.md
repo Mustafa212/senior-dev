@@ -58,6 +58,9 @@ A launch brief's `End:` changes the options: `push-for-review` offers **Commit a
 **Commit only** and **Nothing** (no pull request, no link, no state change); `local` offers
 **Commit only** and **Nothing**. **Commit only** stops after step 3.1.
 
+With the brief's `Approvals: auto`, write the question to the state and take its first option without
+asking.
+
 Set `Waiting: no` after the answer.
 
 ## 3. Do what was chosen, in order, stopping at the first failure
