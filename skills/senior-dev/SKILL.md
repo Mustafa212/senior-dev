@@ -136,8 +136,8 @@ Put the user's decisions first and the reference material after, so the user can
 
 **Decide** (top)
 - **Questions:** only questions whose answers change the implementation, at most 4 per round. Don't
-  ask anything the code can answer. Look and feel can't be settled by talking: offer a throwaway
-  mockup, outside the repository, and ask about that.
+  ask anything the code can answer: for a contract or response shape, propose the pattern the
+  codebase already uses. Look and feel: offer a throwaway mockup outside the repository.
 - **Contradictions and gaps:** each `C-n` with your recommendation (see `references/story-and-rules.md`). If there are none, say so explicitly.
 - **Approaches:** only when there's a real choice: 2–3 options with trade-offs, and your
   recommendation.
@@ -194,8 +194,8 @@ this gate. In Lite, Phase 1 and Phase 2 may go in one message, with the plan wri
   reported reason. Then fix the bug, watch the test pass, and rerun the Phase 0 reproduction
   itself, quoting its result: when the test can't reach the chain that triggered the bug, the plan
   says so and the reproduction is the proof.
-- **Small steps.** Build after each step or slice, and run the existing tests related to the files
-  you touched. Run every build and test suite as
+- **Small steps.** After each step or slice, build the projects you touched (the whole solution is
+  for the gate), and run the existing tests related to them. Run every build and test suite as
   `bash "${CLAUDE_PLUGIN_ROOT}/scripts/heavy.sh" <command>`: one heavy command at a time across the
   machine, never a dev server or a watch mode; several go as `bash heavy.sh bash -c '<commands>'`.
   "heavy.sh: waiting for …" is another session building, not a hang: use a long timeout or the
@@ -226,8 +226,8 @@ this gate. In Lite, Phase 1 and Phase 2 may go in one message, with the plan wri
 - **Try it yourself:** a ready-made request for the endpoint, or the screen and how to reach it.
 - Deviations from the plan, and the results of the build and related tests.
 
-End Phase 4 with one line telling the user they can press Esc to stop and look at the code before
-review and tests finish. Then go straight on to Phases 5 and 6 in the same turn.
+End Phase 4 with one line: Esc stops the run to look at the code before review and tests finish.
+Then go straight on to Phases 5 and 6.
 
 ## Phases 5 + 6 — Blind review and blind tests
 

@@ -30,8 +30,12 @@ mkdir -p "$(dirname "$P")"
 
 Use `origin/<base-branch>` after a fetch: the local base branch is often stale or missing, and a
 stale base puts teammates' merged commits into the diff. An empty `F` would diff the whole tree.
-Before dispatching, check that the `--stat` at the top of `$P` lists exactly the change set; if any
-check fails, fix the package and never dispatch a reviewer on it.
+Before dispatching, check that the `--stat` at the top of `$P` lists exactly the change set, and that
+`grep -c '^diff --git' "$P"` equals `${#F[@]}`; if any check fails, fix the package and never
+dispatch a reviewer on it. When you build `F` from git output, read it NUL-separated
+(`mapfile -d '' -t F < <(git diff -z --name-only "$B")`, then keep the change set): without `-z`,
+git quotes paths with non-ASCII characters (an invisible direction mark included), and a quoted path
+matches nothing, so the file silently drops out of the review.
 
 `git diff $B` covers the branch's commits and the uncommitted changes to tracked files; the loop
 adds the new files. Limit both to the change set: the working tree can hold someone else's staged
