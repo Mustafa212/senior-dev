@@ -74,7 +74,8 @@ first question: the files to commit (count and the first few), the commit messag
 Questions 2 and 3 count only when the answer to 1 opens a pull request.
 
 With the brief's `Approvals: auto`, write the questions to the state and take each first option
-without asking.
+without asking. With its `Answers: sprint-lead` (and no `auto`), the three questions go into the
+questions file as one `Q-<n>` (`references/launch-brief.md`), and the run waits for the answer.
 
 Set `Waiting: no` after the answer.
 

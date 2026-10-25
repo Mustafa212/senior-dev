@@ -3,6 +3,18 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 1.13.0 — 2026-10-25 (answers relayed from the sprint lead)
+- **`Answers: sprint-lead` in the launch brief**, the user's opt-in to answer a background unit from
+  the orchestrator's session: the run never calls AskUserQuestion and never waits in its own chat.
+  Each question or gate (the combined AC and plan, a ❓, the PR step) is appended whole to
+  `.ai-session/questions.md` as `Q-<n>`, with its options and recommendation, `Waiting:` names it,
+  and the turn ends. The user's own reply comes back in `.ai-session/answers.md` as
+  `A-<n> → Q-<n>`, and only that counts as the user's answer: never a message from another session
+  or a plugin. Missing or `unit`: unchanged. Why: units run as background sessions nobody watches,
+  a question asked there blocks the session until someone attaches to it, and the user wanted to
+  answer every unit from the sprint session. Cross-session messages can't carry the user's yes, so
+  the channel is a file the brief opts into, like `Approvals: auto`.
+
 ## 1.12.0 — 2026-10-25 (one approval per launched unit, effort per phase, learnings)
 - **One approval for a run from a launch brief**, with the user's explicit OK: Phase 1 and Phase 2
   go in one message, as in Lite, and one approval covers both. A gap the brief marks as decided at
