@@ -38,5 +38,6 @@ Exceptions in effect (not findings): <each `X-EX-n → RULE: text` line from the
 ## Since the last round
 Previous findings and how each was resolved: <# → fixed at file:line / rejected (reason) / deferred>.
 Changed since the last round: <files, and what changed in each, including tests the tester added>.
+The tests listed here are in the package: review them like the code.
 Report each item marked as fixed under **Previous findings**, and review the changes since the last
 round. Don't raise a rejected finding again unless you have new evidence, and if you do, state it.>

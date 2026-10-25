@@ -3,6 +3,57 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## 1.12.0 — 2026-10-25 (one approval per launched unit, effort per phase, learnings)
+- **One approval for a run from a launch brief**, with the user's explicit OK: Phase 1 and Phase 2
+  go in one message, as in Lite, and one approval covers both. A gap the brief marks as decided at
+  planning is listed as decided, not asked again. Why: a user running a sprint approved each story
+  three times (the sprint plan, then each unit's AC, then its plan) and felt the plan was made twice.
+- **A short plan first:** what I'll build, how we'll know it works, what I need from you, in plain
+  words with no file names; the steps, proof table and risks follow under Details. Why: plans read
+  as dense and hard to follow.
+- **Right-to-left languages:** each sentence starts and ends with a word in that language, and code,
+  paths and English terms sit in backticks, tables or lines of their own. Why: Arabic lines mixed
+  with English rendered out of order.
+- **Effort per phase, applied automatically:** the plan gives a level per phase, the run writes the
+  current one on the state's new `Effort:` line, and the new hooks module (`hooks/effort.ts`, a
+  Claude Code mod) puts it on every main-conversation request and shows it in the status line;
+  subagents get theirs in the Agent call. Before the approval and after `Phase: DONE` the session
+  keeps its own effort. Why: the user switched the effort by hand at every phase, and the app does
+  not let a session change its own effort; the status line and the approved plan keep the change
+  visible.
+- **The PR step asks once, with the target and reviewers:** every option is offered, and the
+  brief's `End:` is only the recommended one; a second question picks the target branch, a third
+  the reviewers (from the project notes or CODEOWNERS; a typed name is remembered). Azure Repos adds
+  them with `update_reviewers`. Why: the user wanted to decide at the end of a unit whether to raise
+  a pull request and who reviews it, not at planning.
+- **What the run learned:** at the end of every run, project facts still missing go into the
+  project's notes (dated), and the final report's new `Learned` line lists them; Phase 3 re-reads
+  the notes when another run changed them. Why: later sessions, in other worktrees too, should
+  start from what earlier ones found, and the user never saw what was recorded.
+- **Nine waiting proposals from launched runs, applied** (they had piled up, since runs from a
+  brief never edit the plugin; the orchestrator's session now applies them once its units are done,
+  and every final report counts them). Each came from a real run:
+  - A `C-n` says first, in plain words in the user's language, what the rule or choice asks for and
+    what each option changes; rule IDs follow. Why: a user couldn't answer a C-n built on rule IDs.
+  - Tester: build on the project's existing tests, helpers and harness instead of a parallel
+    suite; never accept two outcomes (`A || B`); recapture date-relative baselines in the same run;
+    keep record-only cases out of committed specs; a comment claiming a fix gets a case that
+    triggers the failure. Why: duplicated harnesses, tests blind to the regression, a midnight date
+    shift read as a failure, and a commented "fix" that didn't fix.
+  - Review loop: fetch the base before the first review package and ask about merging what moved;
+    save each reviewer report verbatim under the round's evidence; ask the tester's design questions
+    only after the reviewer returns, merged with the triage's; recover a tester lost mid-run from the
+    files it left; check the app accepts the credentials handed to the tester. Why: a review of code
+    that changed again, a resumed run that lost the findings' text, a decision reversed by a later
+    finding, a full redo after a restart, and a credential with a stray line ending.
+  - Reviewer: from round 2 the tester's tests are reviewed like code, and the report lists the
+    files it read. Why: a round-2 reviewer approved without opening the tests.
+  - Planning: run the ORM's pending-changes check before planning a migration; render a visual
+    artifact and look at it before Phase 4. Why: a migration nobody needed, and a report whose bands
+    printed in the wrong order while text assertions passed.
+  - Final report: run the commit hooks on the change set before the final build and tests. Why: a
+    secret scanner rejected the commit after the slow final runs were green.
+
 ## 1.11.0 — 2026-10-21 (opt-in autopilot approvals)
 - **`Approvals: auto` in the launch brief**, with the user's explicit OK to relax the Phase 1 and
   Phase 2 gates for runs that opt in: the run takes its own recommendation wherever it would ask

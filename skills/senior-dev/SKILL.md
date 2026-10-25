@@ -12,7 +12,7 @@ The workflow is worth its cost because of four things. Don't trade them away to 
 
 1. **Agreement before code.** Acceptance criteria and an approved plan mean you build the right thing.
 2. **Independence.** The agents that judge the work never see your reasoning, so they can't inherit
-   your blind spots. A reviewer who has read why you chose something tends to agree with it.
+   your blind spots.
 3. **A defined finish line.** The loop ends when every acceptance criterion is proven, not when the
    work feels done.
 4. **Evidence, not claims.** "Done", "works" and "tested" each need real output behind them: a
@@ -20,7 +20,9 @@ The workflow is worth its cost because of four things. Don't trade them away to 
 
 Talk to the user in their own language and dialect. Keep code, identifiers and technical terms in
 English. Start every phase with a header line such as `## Phase 2 — Plan` so the user always knows
-where you are.
+where you are. In a right-to-left language such as Arabic, mixed lines render out of order: start
+and end each sentence with a word in that language, and put code, paths and English terms in
+backticks, tables or lines of their own, never at a line's start or end.
 
 | # | Phase | Gate to move on |
 |---|-------|-----------------|
@@ -80,22 +82,23 @@ This file is the map. Read each reference when its phase starts, not all at once
 - Phases 0–1: `references/story-and-rules.md` (the story, contradictions, gaps, the project's rules)
 - Phase 0: `references/state-and-local-data.md` (also whenever you write the state or notes), and
   `references/launch-brief.md` when the run started from a launch brief
-- Lite and Review existing: `references/modes.md`
 - Phase 2: `references/planning.md`
 - Phases 5–7: `references/review-loop.md`, plus `references/reviewer-brief.md` and
   `references/tester-brief.md` for the agents (defined in the plugin's `agents/`)
 - After the final report: `references/pull-request.md`
 - The retro at the end of every run, and any change to the skill: `references/improving.md`
 
-**Always on**, because these are never skipped:
+**Always on:**
 - The **story is the source of truth.** Pass it verbatim to every agent.
 - **Rules:** this skill has no coding rules of its own. The project's rules apply: an ai-standards
   `AGENTS.md` first, then other written rules, else the codebase's consistent conventions. Never
   edit a project's rules without the user's OK.
 - **State:** one file per story under `.ai-session/senior-dev/` plus an index in
   `.ai-session/STATE.md`. Update `NEXT` **before** each step, `Waiting` whenever you stop for the
-  user and once they answer, and `Retro notes` the moment the user corrects you. After a compaction, or when unsure where you are, re-read the
-  state file and the current phase's and mode's references, and trust them and git over memory.
+  user and once they answer, `Effort` as each phase starts (the approved plan's level, which the
+  plugin's hook applies), and `Retro notes` the moment the user corrects you. After a compaction,
+  or when unsure where you are, re-read the state file and the current phase's and mode's
+  references, and trust them and git over memory.
 - **Local data:** anything specific to a project, a company or this machine lives in
   `~/.claude/senior-dev/`, never in the plugin.
 
@@ -110,15 +113,13 @@ Say one line ("reading the code…"), then work through these steps in order.
 2. **Local data.** Read `~/.claude/senior-dev/config.md` (the tools on this machine). Then find the
    project's local folder, or create it on the first run, and read its `notes.md` (what earlier
    runs learned).
-3. **Story.** If the run started with a launch brief (`.ai-session/launch.md`, written by an
-   orchestrator such as sprint-pilot), read it first, field by field, as
-   `references/launch-brief.md` says. If the story is a link, fetch it now. You'll confirm it with
-   the user in Phase 1.
+3. **Story.** A launch brief (`.ai-session/launch.md`, from an orchestrator such as sprint-pilot)
+   is read first, field by field, as `references/launch-brief.md` says. A story link is fetched
+   now; Phase 1 confirms it.
 4. **Docs and rules.** Read the project's own docs (CLAUDE.md, AGENTS.md, and the architecture docs
    or skills the notes point to), and find the project's rules in effect.
-5. **Live git state.** Run `git status`, then `git fetch`, and read the live branch:
-   `git rev-parse --abbrev-ref HEAD`, `git log HEAD..@{u}` (skip it when the branch has no upstream
-   yet), and the last few commits. Build on related work teammates have pushed instead of
+5. **Live git state.** Run `git status` and `git fetch`, then read the branch, its incoming commits
+   (`git log HEAD..@{u}`, once it has an upstream) and the last few commits. Build on related work teammates have pushed instead of
    duplicating it. Fetch again before Phase 3 and whenever the user mentions new commits. If you're
    on the default branch, Phase 2 proposes a branch.
 6. **Trace the code.** Find the code the task touches and the closest existing feature to follow,
@@ -150,11 +151,10 @@ your recommendation.
 **Reference** (below)
 - **Story as fetched** (when it came from a link): the title, how many rules or AC the item has,
   and the attachments and linked items you read, so the user can spot anything missing.
-- **Context summary:** 3–6 lines of what Phase 0 found: the traced flow as a `file:line` chain
-  (`Controller.Action → Handler → Repository`), the feature you'll follow, the branch state (the
-  branch, and any incoming commits that matter), and for a bug, the evidence, the consumer's exact
-  call, the cause you believe with what confirms it, and the causes you ruled out (an unconfirmed
-  cause is a question under Decide), so the user can catch a wrong path early.
+- **Context summary:** 3–6 lines of what Phase 0 found: the traced flow as a `file:line` chain, the
+  feature you'll follow, the branch and any incoming commits that matter, and for a bug the
+  evidence, the consumer's exact call, the cause with what confirms it, and the causes ruled out
+  (an unconfirmed cause is a question under Decide), so the user can catch a wrong path early.
 - **Understanding:** 2–4 lines restating the task in your own words.
 - **Acceptance criteria:** `AC-1 … AC-n`, written as Given / When / Then, each citing its story
   source and together covering the error and edge cases that matter. Quote messages, labels and
@@ -175,43 +175,41 @@ line.
 
 **Read first:** `references/planning.md`.
 
-Present: **slices** (big stories only) · **steps** with their files · **Proof per AC** (for a bug,
-the test that must fail without the fix) · **risks and rollback** · **side effects** that need
-approval · **branch** (if you're on the default one; with a launch brief, the brief's existing branch) · **effort, models and cost**, plus the
-optional second reviewer for security, money or data-integrity changes, naming what it sends to
-which vendor.
+Present the short version first, in plain words: **what you'll build**, **how each AC will be
+proven** (for a bug, the test that must fail without the fix), and **what you need from the user**:
+side effects, effort per phase, models and cost, and the optional second reviewer for security,
+money or data-integrity changes. The details follow: **slices** (big stories only), **steps** with
+their files, **risks and rollback**, and the **branch** (with a launch brief, its existing one).
 
 Wait for explicit approval ("approve", in the user's language). If the user edits the plan,
 re-present only the parts that changed. Phase 1's approval never covers the plan: no mode skips
-this gate. In Lite, Phase 1 and Phase 2 may go in one message, with the plan written out in full
-(effort, models and cost included); then one approval covers both.
+this gate. In Lite, and in a run started from a launch brief, Phase 1 and Phase 2 go in one
+message, the plan written out in full; one approval covers both.
 
 ## Phase 3 — Implement
 
-- Follow the approved plan and the project's rules in effect, and use any skill that helps. Examples:
-  the project's architecture skill, `superpowers:test-driven-development` if the user wants TDD,
-  and `superpowers:systematic-debugging` for an unclear build or test failure.
+- Re-read the project's notes if they changed since Phase 0: a run in another worktree may have
+  added a fact.
+- Follow the approved plan and the project's rules, and use any skill that helps (the project's
+  architecture skill, `superpowers:test-driven-development` for TDD,
+  `superpowers:systematic-debugging` for an unclear failure).
 - **Bug fixes start red.** Write the test the plan named first, run it, and watch it fail for the
   reported reason. Then fix the bug, watch the test pass, and rerun the Phase 0 reproduction
   itself, quoting its result: when the test can't reach the chain that triggered the bug, the plan
   says so and the reproduction is the proof.
 - **Small steps.** After each step or slice, build the projects you touched (the whole solution is
   for the gate), and run the existing tests related to them. Run every build and test suite as
-  `bash "${CLAUDE_PLUGIN_ROOT}/scripts/heavy.sh" <command>`: one heavy command at a time across the
-  machine, never a dev server or a watch mode; several go as `bash heavy.sh bash -c '<commands>'`.
-  "heavy.sh: waiting for …" is another session building, not a hang: use a long timeout or the
-  background.
-- If you find the plan is wrong, an AC can't be met as written, or the story conflicts with what you
-  find in the code or data, stop. Bring the problem and a proposal to the user instead of deviating
-  silently. Small mechanical deviations (an extra `using`, a renamed local) are fine; note them in
-  Phase 4.
-- **Gate:** the build passes with the project's real build command (`dotnet build <sln>`,
-  `npm run build`, `tsc`, and so on), with no new errors and no new warnings in the files you
-  touched, and the related existing tests pass. A project check command (for example in
-  `AGENTS.md`) passes too.
-- **Self-check, which produces the AC map.** Walk every AC (in the words the user approved) through
-  what you built, close the gaps, and note where each AC is implemented. That becomes the AC map in
-  Phase 4.
+  `bash "${CLAUDE_PLUGIN_ROOT}/scripts/heavy.sh" <command>` (one at a time on the machine; several
+  as `bash heavy.sh bash -c '<commands>'`; never a dev server or watch mode). "heavy.sh: waiting
+  for …" is another session building: use a long timeout or the background.
+- If the plan proves wrong, an AC can't be met as written, or the story conflicts with the code or
+  data, stop and bring the user the problem and a proposal. Small mechanical deviations (an extra
+  `using`) are fine; note them in Phase 4.
+- **Gate:** the build passes with the project's real build command, with no new errors and no new
+  warnings in the files you touched, and the related existing tests pass. A project check command
+  (for example in `AGENTS.md`) passes too.
+- **Self-check:** walk every AC, in the words the user approved, through what you built, close the
+  gaps, and note where each is implemented: that's Phase 4's AC map.
 - Don't commit during the run; the PR step asks. At the end of each slice, offer a commit message
   in the repo's convention so the user can checkpoint.
 - Managed files and baselined debt are never changed inside a story (see
@@ -235,9 +233,8 @@ Then go straight on to Phases 5 and 6.
 **Read first:** `references/review-loop.md`. Then fill in `references/reviewer-brief.md` and
 `references/tester-brief.md`.
 
-- Both agents start fresh and **blind**: the story verbatim and the rest of the "Give them" column
-  in `references/review-loop.md`, never your reasoning, your opinion of the code, the alternatives
-  you rejected, or hints about where to look.
+- Both agents start fresh and **blind**: the "Give them" column of `references/review-loop.md`,
+  the story verbatim included, never your reasoning, your opinion of the code or hints.
 - The reviewer and the tester's design run in parallel. The tester executes only after the reviewer
   returns and you've snapshotted the changed production files, and heavy commands run one at a
   time. You add **scenarios only**, never expected results taken from the implementation.
@@ -270,8 +267,11 @@ the approach is wrong, and only the user can settle that.
 
 Before you write it:
 - `git fetch` again; if the base branch moved during the run, say so and check for conflicts.
+- Run the repo's commit hooks on the change set (`references/pull-request.md`), so a rejection
+  comes before the slow final runs.
 - Rerun the build and every related test through `heavy.sh`, and quote the counts.
-- Do the retro (`references/improving.md`); the core principles never weaken without the user's OK.
+- Do the retro (`references/improving.md`) and save what the run learned ("What the run learned" in
+  `references/state-and-local-data.md`); the core principles never weaken without the user's OK.
 
 Keep the chat version **short**; the ticket-ready detail goes in the delivery log.
 
@@ -281,10 +281,11 @@ Keep the chat version **short**; the ticket-ready detail goes in the delivery lo
 - **Deploy & QA notes:** migrations in run order, config and environment changes, manual steps,
   and what QA should focus on (anything tests don't cover, COSMETIC changes the tester saw, risky
   areas).
-- A suggested commit message and a ready-to-paste PR description (summary, per-AC status and evidence, tests, deploy notes, merge danger).
+- A suggested commit message and a ready-to-paste PR description (`references/pull-request.md`).
 - **Cleanup:** stop every app, server or emulator this run started (only those). Ask whether to
   keep, promote or delete the throwaway test project, and whether to keep the evidence folder.
 - **PR:** the outcome of the PR step (below).
+- **Learned:** each fact this run added to the project's notes or the local config, or "none".
 - **Skill updates:** what changed in this skill during the run and why, or "none".
 - **Delivery log:** where it was saved.
 
@@ -298,6 +299,5 @@ The end of a run, in this order:
 1. Show the report and get the cleanup answers. Tests promoted into the repo join the change set:
    rerun the build and those tests, and quote the new counts.
 2. The PR step (`references/pull-request.md`): one question; nothing is committed, pushed or opened
-   without a yes.
-3. Its outcome goes in the chat's PR line, the state and the delivery log.
-4. Mark the state file DONE.
+   without a yes. Its outcome goes in the chat's PR line, the state and the delivery log.
+3. Mark the state file DONE.

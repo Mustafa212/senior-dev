@@ -30,7 +30,9 @@ can't see your agents. Set `Waiting: yes — <what you asked>` just before you s
 gate, a ❓, the PR step) and `Waiting: no` once they answer. `Base` is the branch the work started
 from: the launch brief's, or the one you branched from in Phase 2. `PR` is the pull request's URL
 once one is opened. An orchestrator reads these three fields to show the user where every run
-stands.
+stands. `Effort` is the approved plan's level for the current phase, rewritten as each phase starts
+(`none` before the approval); the plugin's hook applies it to the session. A finished run's line
+reads `Phase: DONE`, which ends the hook's override.
 
 ```
 # <story id> — <title>
@@ -43,6 +45,7 @@ stands.
 Story: <link or "pasted">   Mode: Full | Lite | Review existing   Branch: <branch>
 Tracker: <MCP server, or none>   Work items: <ids>   Link PR to: <ids>   Review state: <id → state; …, or none>
 Phase: <n — name>   Last updated: <agent, date time>
+Effort: <low | medium | high | xhigh | max (why), or none before the plan is approved>
 NEXT: <the single next action>
 Waiting: no   Base: <branch the work started from>   PR: none
 
@@ -90,7 +93,7 @@ against the `Repos:` line at the top of each `notes.md`. If nothing matches:
 Repos: <local path> (<git remote URL>)[, …]
 
 ## Read first        docs or skills to read before coding
-## Conventions       branch naming, commit style, build / test / run commands
+## Conventions       branch naming, commit style, PR reviewers, build / test / run commands
 ## Rules             ai-standards AGENTS.md | other written rules (which files) | conventions only
 ## Facts and traps   one bullet each: the fact, and why it matters
 ## Test setup        harnesses or templates that worked, and where they live
@@ -102,6 +105,18 @@ during the run, not just at the end, so a dead session loses nothing. Tool and m
 MCP's quirk, an OS quirk) go in `config.md`. If you're about to write a project name, ticket number,
 internal host, URL or tool configuration into the plugin, it belongs here instead, and only the
 general lesson goes into the plugin.
+
+**What the run learned**, at the end of every run, a stopped one included, before the final
+report. Every later run on this project reads these notes, whatever session or worktree it runs in,
+so this is how the next one knows what happened:
+1. Go over the state's `Retro notes`, `Decisions` and `Rounds`, and ask what a teammate starting
+   the next story here would want to know: a fact you had to dig for, a trap that cost a round, a
+   pattern that worked, a decision that holds beyond this story.
+2. Re-read `notes.md` (another run may have changed it), then add each fact still missing, dated,
+   in its section, merging with what's there. Tool and machine facts go in `config.md`; lessons
+   about this workflow go through the retro (`references/improving.md`).
+3. List what you added on the final report's `Learned` line, so the user sees it and can strike a
+   wrong one. Nothing added: "none".
 
 **Keep notes true and small.** Date each new fact. Before relying on a fact that names a file,
 function or command, check it still exists, and fix or delete a fact the moment it proves wrong.

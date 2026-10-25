@@ -4,7 +4,15 @@
 
 ## Plan contents (Phase 2)
 
-Present the following:
+**The short version comes first**, so the user can approve it in one read. Three headed blocks, a
+few plain sentences each, with no file names or code:
+
+1. **What I'll build:** the behaviour the user will see, and what stays as it is.
+2. **How we'll know it works:** one line per AC, saying how it is proven.
+3. **What I need from you:** each decision, side effect and risk that needs a yes, then the effort
+   per phase, the models and the cost.
+
+Then a `Details` heading, with the following:
 
 - **Slices** (big stories only): when the story has independent groups of AC or spans many layers,
   propose slices. Each slice owns a subset of the AC and goes through Phases 3–7 on its own, with its
@@ -23,15 +31,22 @@ Present the following:
   each risky one, how to roll it back (a Down migration, a feature flag, keeping the old endpoint
   version). A destructive migration (dropping or renaming a column or table, narrowing a type,
   `NOT NULL` without a default) states its data impact and needs explicit approval; where production
-  data must survive, plan it as expand → migrate → contract.
+  data must survive, plan it as expand → migrate → contract. Before planning a migration for a model
+  change, run the ORM's pending-changes check on it (EF Core `dotnet ef migrations
+  has-pending-model-changes`, Django `makemigrations --check --dry-run`, Prisma `migrate diff`): a
+  column a database view already returns usually needs none.
 - **Side effects:** anything that would write to a shared database, send email or other messages, or
   call an external service. Each one needs explicit approval here.
 - **Branch:** if you're on the default branch, propose a branch named after the project's convention
   (from the local notes, or else from recent branch names). Create it only after approval.
-- **Effort, models and cost:** the reasoning effort you think fits (low / medium / high / xhigh /
-  max) and why, for example "high: touches auth across 3 layers". If a tool to change the session
-  effort is available, offer to switch it yourself after approval; otherwise ask the user to switch
-  it. Name the subagent models you picked (see "Choosing subagent models" below) and the expected cost,
+- **Effort, models and cost:** the reasoning effort (low / medium / high / xhigh / max) for each
+  phase after approval, and why, for example "Phase 3: high (auth across 3 layers); Phase 7:
+  medium (triage)". One level for all of them is fine when the work doesn't change. Once the plan is
+  approved, write the current phase's level on the state's `Effort:` line, and the next one as each
+  phase starts: the plugin's hook applies it to every request and shows it in the status line. In a
+  program without the hook, ask the user to switch it instead. Each subagent gets a level too,
+  passed as `effort` in its Agent call (low for rerunning a suite, high or more for a subtle review).
+  Name the subagent models you picked (see "Choosing subagent models" below) and the expected cost,
   for example "about 2 subagent runs per round, at most 3 rounds", so the user can weigh Full
   against Lite. For security, money or data-integrity changes, propose the optional second reviewer
   from another model family (see `references/review-loop.md`), and say plainly what it sends where:
@@ -63,6 +78,8 @@ wiring.
   tool (for example the Maestro MCP) if one is configured. Interactive widgets need
   `Semantics(identifier:)`, because Flutter's `Key()` isn't visible to UI automation. If no tool is
   configured, say so in the plan and propose setting one up, recorded in the local config.
+- **A visual artifact** (a report, a PDF, a printed page): render it to an image and look at it
+  before Phase 4; text assertions pass while bands or sections sit in the wrong order.
 
 **Mutation check** for critical logic (security, money, data integrity, and any bug fix in Full
 mode): the plan names it, and the tester proves the tests catch a broken implementation. Use the language's

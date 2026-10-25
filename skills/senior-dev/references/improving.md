@@ -11,7 +11,9 @@ propose the change and apply it once they approve.
 they write each proposed change, with its reason and the evidence, to
 `~/.claude/senior-dev/proposals/<date>-<story id>.md` and say so in the final report. A run without
 a brief applies any waiting proposals during its retro, one at a time, with the same checks as its
-own changes, then deletes each file it applied or rejected.
+own changes, then deletes each file it applied or rejected. When most runs come from briefs,
+proposals pile up: the orchestrator's session applies them too once its units are done (it is the
+one session editing the plugin then), and every final report says how many wait.
 
 **Where to edit.** Only in a git clone of the plugin: the folder a local marketplace points to, or
 the user's fork. If the skill runs from the plugin cache (a path under `~/.claude/plugins/cache/`),

@@ -29,7 +29,9 @@ mkdir -p "$(dirname "$P")"
 ```
 
 Use `origin/<base-branch>` after a fetch: the local base branch is often stale or missing, and a
-stale base puts teammates' merged commits into the diff. An empty `F` would diff the whole tree.
+stale base puts teammates' merged commits into the diff. Before the first round's package, fetch
+again: if the base moved since Phase 3 began, show the user what changed in the touched areas and
+ask whether to merge it in before review, since a review of code that changes again is wasted. An empty `F` would diff the whole tree.
 Before dispatching, check that the `--stat` at the top of `$P` lists exactly the change set, and that
 `grep -c '^diff --git' "$P"` equals `${#F[@]}`; if any check fails, fix the package and never
 dispatch a reviewer on it. When you build `F` from git output, read it NUL-separated
@@ -58,6 +60,18 @@ package for every review round.
    When the tester returns, run `git hash-object --no-filters <files>` again. A file whose hash
    changed was left modified: restore it with `git cat-file -p <hash> > <file>`, say so in the
    triage, and rerun the related tests.
+5. A tester lost after it started executing (a restart, a crash): check the hashes as above, run
+   the test files it left through `heavy.sh` yourself, classify each failure as the tester would,
+   and note in the state that its report is missing. Dispatch a fresh tester only for the parts of
+   its design that left no file, not for the whole design again.
+
+When the run starts an app for the tester, check with one request that the app accepts the
+credentials you hand over before dispatching, and pass secrets in a file the tester reads as it is
+(a key generated on one OS can carry a stray line ending the app rejects).
+
+When a reviewer returns, save its report verbatim to `.ai-session/evidence/round-<n>/review.md`
+before triage, and point the state's round line at it: a run resumed in another session needs each
+finding's own text for the next round's "Previous findings".
 
 Heavy jobs run one at a time: when the tests are heavy (a full build, Playwright, an integration
 suite), only one tester executes at a time, it runs one command at a time with filtered output, and
@@ -92,7 +106,9 @@ serializes them across every session on the machine.
      proof level) and with the risky spots you know about. Send additions with SendMessage, as
      **scenarios only** ("also cover: consent exists for v1 but v2 is current"). Never send expected
      results taken from the implementation, because expected results come from the AC. If an
-     expected result is ambiguous, the AC is ambiguous, so take that question to the user.
+     expected result is ambiguous, the AC is ambiguous, so take that question to the user, but
+     only once the reviewer has returned, in the same message as the triage's ❓ items, merged with
+     any question the reviewer raises: a finding can change the facts the user decides on.
   3. Once the reviewer has returned and the snapshot is taken, tell the tester to proceed. It
      implements the cases, runs them, including the mutation check where the plan asks for it, and
      returns results with evidence saved under `.ai-session/evidence/round-<n>/`.
@@ -146,7 +162,9 @@ Then decide:
 
 **Check the tester's tests** that stay in the repo, since no reviewer may see them if this is the
 last round: they follow the project's test rules, assert outcomes from the story rather than
-presentation, and each one would fail without the behavior it proves. Fix or flag weak ones.
+presentation, and each one would fail without the behavior it proves. Fix or flag weak ones. A
+case the tester could only record (its expected result was a ❓) never stays as a spec that always
+passes: once the ❓ is settled, turn it into an assertion or delete it.
 
 Show the user one triage table:
 
