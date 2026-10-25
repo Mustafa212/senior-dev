@@ -34,7 +34,10 @@ If there's no formal story, the user's written request plays the same role.
   story and the existing code, data or business rules, and between the story and the project
   architecture. List each one as `C-1 …`: what conflicts, where (quote the story line and give the
   `file:line`), and the options, each with one concrete example of what that reading would build,
-  so the user can answer without opening the story. Recommend an option, but don't pick it
+  so the user can answer without opening the story. Say first, in a sentence or two of plain words
+  in the user's language, what the rule or choice asks for and what each option changes for the
+  user or the product; rule IDs come after, as references. Until the user has written prose, use
+  the language of their tracker or earlier sessions. Recommend an option, but don't pick it
   yourself, even when the answer seems obvious. If you find a contradiction later, while implementing, reviewing or testing,
   stop and raise it the same way. Stories rarely cover the following, so check each one for a gap:
   who is allowed to do it (roles, ownership); messages and labels in **every** language the app

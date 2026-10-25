@@ -20,10 +20,17 @@ or "Nothing", means nothing happens.
   request isn't possible, and a push would go straight to that branch. Offer instead: create a
   branch for the work first (`git switch -c <name>`, named by the project's convention, keeping the
   changes) and then ask the question below; or commit only; or nothing.
+- **The commit hooks, before the final runs:** when the repository has hooks that check content
+  (a secret scanner, a linter), run them on the change set before the final report's build and
+  tests: `pre-commit run --files <change set>`, or the hook tool the repository uses. A rejection
+  fixed now doesn't invalidate green runs later. The commit below still runs every hook.
 - **The commit message:** the one from the final report, in the repo's convention (Conventional
   Commits when a commit-msg hook or the project's rules require it), written to
   `.ai-session/commit-msg.txt`.
-- **The target:** the launch brief's `PR target:`; without a brief, the state's `Base:`.
+- **The target:** the launch brief's `PR target:` (its `Base:` when that's `none`); without a
+  brief, the state's `Base:`.
+- **The reviewers:** the project notes' PR reviewers (under Conventions), else the repository's
+  CODEOWNERS entries for the changed files; none found, none offered.
 - **The host,** from `git remote get-url origin`: `github.com` → GitHub; `dev.azure.com` or
   `visualstudio.com` → Azure Repos; anything else → no pull request from here.
 - **The description:** the final report's ready-to-paste PR description, written to
@@ -43,23 +50,31 @@ or "Nothing", means nothing happens.
 
 ## 2. Ask once
 
-Set `Waiting: yes — PR step` in the state. Then AskUserQuestion, with the details in the question:
-the files to commit (count and the first few), the commit message, `push origin <branch>`,
-`PR <branch> → <target>` on <host>, and "link to <items>; move <id> to <state>, …" when there are
-work items and their tracker's MCP server is connected (only the items `Review state` names move;
-`none` means no state change). Options:
+Set `Waiting: yes — PR step` in the state. Then one AskUserQuestion call, with the details in its
+first question: the files to commit (count and the first few), the commit message,
+`push origin <branch>`, `PR <branch> → <target>` on <host>, and "link to <items>; move <id> to
+<state>, …" when there are work items and their tracker's MCP server is connected (only the items
+`Review state` names move; `none` means no state change).
 
-- **All:** commit, push, pull request, link and state.
-- **Commit and push only**
-- **Draft PR:** commit, push, a draft pull request, and the link (no state change).
-- **Nothing**
+1. **What to do:**
+   - **All:** commit, push, pull request, link and state.
+   - **Draft PR:** commit, push, a draft pull request, and the link (no state change).
+   - **Commit and push only**
+   - **Commit only**, which stops after step 3.1.
+   - **Nothing**
 
-A launch brief's `End:` changes the options: `push-for-review` offers **Commit and push only**,
-**Commit only** and **Nothing** (no pull request, no link, no state change); `local` offers
-**Commit only** and **Nothing**. **Commit only** stops after step 3.1.
+   AskUserQuestion takes four options, so leave out the one furthest from the recommendation (the
+   user can still type it). The recommendation goes first: the launch brief's `End:` (`pr` → All,
+   `push-for-review` → Commit and push only, `local` → Commit only), else All.
+2. **The target** (when a pull request is possible): the target first, then the base and the
+   default branch where they differ.
+3. **Reviewers** (multiSelect): the reviewers found, then **None**. A name the user types is used
+   too, and goes in the project notes' PR reviewers, so the next run offers it.
 
-With the brief's `Approvals: auto`, write the question to the state and take its first option without
-asking.
+Questions 2 and 3 count only when the answer to 1 opens a pull request.
+
+With the brief's `Approvals: auto`, write the questions to the state and take each first option
+without asking.
 
 Set `Waiting: no` after the answer.
 
@@ -80,6 +95,10 @@ Set `Waiting: no` after the answer.
      ids as `workItems`, which links them. If the server or its repositories domain isn't available, say so, give
      `<repository URL>/pullrequestcreate?sourceRef=<branch>&targetRef=<target>`, and stop.
    - Any other host: give the branch and the target, and stop.
+   - **Reviewers** chosen: GitHub, `--reviewer <login>,…` on `gh pr create`; Azure Repos, after the
+     pull request exists, `repo_pull_request_write` action `update_reviewers`, `reviewerAction:
+     add`, with the ids `core_get_identity_ids` gives for each name or email. A reviewer that can't
+     be added is said; the pull request stays.
 4. **Link and state** (All; Draft PR links only): the tracker server links the pull request to
    each `Link PR to` item step 3 didn't link, then moves each item `Review state` names to its
    state, and no other item. If either isn't available, say so; the pull request stays.

@@ -29,7 +29,9 @@ build stalls you both. Where a finding depends on runtime behavior, say what sho
 
 **Tests are being written in parallel** by that tester, following the brief's proof per AC. Don't
 report an AC as untested when the proof table covers it. Do report a planned proof too weak to prove
-its AC (for example, a UI check for a business rule).
+its AC (for example, a UI check for a business rule). From round 2 on, the tester's tests are part
+of the package: review them like the code (do they assert the story's outcomes, would they fail
+without the behavior?).
 
 ## Review in this order
 0. **Story fidelity.** Go through the story line by line. Is each requirement implemented exactly as
@@ -66,6 +68,8 @@ change are the author's claims, not evidence: check that the code does what they
 
 ## Output
 **Verdict:** APPROVE | CHANGES_REQUIRED
+
+**Read:** the files of the package you opened, so a file you skipped shows.
 
 **Previous findings** (round 2 and later only): one line per finding the brief lists as fixed,
 `#n — FIXED | NOT FIXED — file:line`. A fix that still lets the problem happen is NOT FIXED, however

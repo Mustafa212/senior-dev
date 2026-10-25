@@ -44,10 +44,17 @@ for work "in phases", "as a senior", or for a review of your branch against a st
 | `skills/senior-dev` | The workflow: phases, gates, modes, the state file, triage, the final report |
 | `agents/reviewer.md` | The blind reviewer. It has read and search tools only, reads the whole change from one frozen diff, and judges against the story |
 | `agents/tester.md` | The blind QA engineer. It designs cases from the story first, then runs them and classifies every failure |
+| `hooks/effort.ts` | Applies the effort the approved plan sets for each phase, and shows it in the status line |
 
-**At the end,** after you've reviewed the work, senior-dev asks one question: commit, push and
-open a pull request to the branch the work started from (GitHub or Azure Repos), and link it to the
-work item. Nothing happens without your yes.
+**At the end,** after you've reviewed the work, senior-dev asks once: commit, push and open a pull
+request (GitHub or Azure Repos), to which branch, with which reviewers, linked to the work item.
+Nothing happens without your yes. It also saves what the run learned to the project's local notes,
+which every later run reads, and lists it in the final report.
+
+**Effort follows the plan.** The plan gives an effort per phase; once you approve it, the plugin's
+hook (a Claude Code mod: a hooks module, Claude Code 2.1.308 or later) puts that effort on every
+request of the main conversation and shows it in the status line. Before the approval, and after
+the run, the session keeps the effort you set.
 
 **One heavy command at a time.** Builds and test suites go through `scripts/heavy.sh`, a
 machine-wide lock, so several sessions running in parallel don't stall each other.
@@ -130,6 +137,7 @@ the new version with `claude plugin marketplace update senior-dev`, then
 skills/senior-dev/SKILL.md          the map: principles, hard gates, modes, phases
 skills/senior-dev/references/       details read only in the phase that needs them, plus the agent briefs
 agents/reviewer.md, agents/tester.md   the blind agents
+hooks/effort.ts, effort.test.ts     the effort hook and its tests (`claude plugin test .`)
 CHANGELOG.md                        every change, with the reason
 .github/workflows/release.yml       a vX.Y.Z tag publishes a GitHub release
 ```

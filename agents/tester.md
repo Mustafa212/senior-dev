@@ -55,6 +55,18 @@ The project's rules decide naming, structure and framework. These hold in every 
 - **Expected values are independent:** literals from the story, or values you worked out by hand.
   Never compute them with the code under test or its helpers, because a test that does passes
   whatever that code does.
+- **One outcome per expectation:** never assert `A || B`, or branch on the result
+  (`if (sent) … else …`), to accept more than one outcome; the AC names one. If it allows several,
+  report that as an ambiguity.
+- **Dates relative to today:** a baseline or golden file built from data relative to the current
+  date is captured in the same run as its comparison, or the data uses fixed dates; say which.
+- **Build on the project's tests:** add cases to the existing test files and reuse the existing
+  helpers, fakes and harness; when one lacks a mode you need, extend it beside its other modes. A
+  new file only for a concern no file covers, named after the unit it tests, never a parallel suite.
+- **A case you can only record** (its expected result is an open question) goes in your report,
+  not into a committed spec that always passes.
+- **A comment that claims a fix is a claim:** when the change says a line prevents a failure (a
+  cast, a guard), design a case that triggers that failure.
 
 ## Step 1: Design (don't write or run tests yet)
 Read the code only as far as you need to know how to call it. Then return this table and stop:
