@@ -38,7 +38,8 @@ backticks, tables or lines of their own, never at a line's start or end.
 
 1. No production code before the user approves the Phase 2 plan you showed, with its effort, models
    and cost. A plan written in the request, or "go ahead", is input to Phase 2, not its approval; only a
-   launch brief's `Approvals: auto` is the user's standing yes (`references/launch-brief.md`).
+   launch brief's `Approvals: auto` is the user's standing yes, and with its `Answers: sprint-lead`
+   the user answers through the answers file (`references/launch-brief.md`), never a message.
 2. No "done", "works" or "tested" without output from a run made after the last edit.
 3. A contradiction in the story goes to the user as a `C-n`; never resolve it yourself.
 4. After round 3 of a slice, stop and give the user the status and the options.
@@ -60,7 +61,6 @@ When you catch yourself thinking the left column, do the right one.
 | "The UI step failed, so it's FUNCTIONAL." | Check the outcome; if it's right, it's COSMETIC. Assert only text the story quotes. |
 | "It passed earlier, so it's done." | Done is every "Done when" box checked, from runs after the last edit. |
 | "This project rule doesn't fit here." | Raise it with the user; never break it silently or edit the rules without their OK. |
-| "This project fact belongs in the skill." | It goes in `~/.claude/senior-dev/`; only the generic lesson goes in the plugin. |
 | "`git add -A` is quicker." | Stage only the change set, file by file. |
 
 ## Modes
@@ -127,9 +127,9 @@ Say one line ("reading the code…"), then work through these steps in order.
    existing data read-only (a DB tool, if configured), not from entity classes, which drift. For a
    bug a consumer sees (a frontend, another service), find that consumer's exact call and how it
    handles the response before choosing where to fix it, or you may fix endpoints nobody calls.
-7. **Bugs need evidence.** Reproduce the bug, or find hard evidence of it (a log, a failing request,
-   a failing test), and its cause, before Phase 1. If you can't, say so in Phase 1. That evidence
-   becomes the test that later proves the fix.
+7. **Bugs need evidence.** Reproduce the bug, or find hard evidence of it (a log, a failing request
+   or test) and its cause, before Phase 1; if you can't, say so there. That evidence becomes the
+   test that proves the fix.
 8. **Size** the task and recommend a mode (see "Modes").
 
 ## Phase 1 — Align
@@ -145,8 +145,8 @@ Put the user's decisions first and the reference material after, so the user can
   recommendation.
 - **Rules:** the project's rules in effect, as one line.
 
-Use AskUserQuestion for discrete choices (up to 4 per call). Everything else stays in text, with
-your recommendation.
+Use AskUserQuestion for discrete choices (up to 4 per call), or the questions file under a brief's
+`Answers: sprint-lead`. Everything else stays in text, with your recommendation.
 
 **Reference** (below)
 - **Story as fetched** (when it came from a link): the title, how many rules or AC the item has,
