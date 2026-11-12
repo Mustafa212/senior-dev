@@ -3,6 +3,45 @@
 Newest first. Each entry records what changed and why, generically: no project names or ticket
 numbers. Project-specific learnings live in local notes (see "Local data" in SKILL.md).
 
+## Unreleased — 2026-11-12 (the checks before a merge)
+- **The blind tests run again on the final tip.** When the branch merges its base after the tests
+  ran, the tip goes into the tester's branch and its tests rerun there. Why: in a run with parallel
+  branches, each lane merged the base after its blind tests, and only a rerun could show the tests
+  still held on the code being merged.
+- **A wrapper failure in a run's output is not a result.** Why: a gate file held only the build
+  wrapper's "no free process" error, which reads like a failed build until its tail is checked.
+- **Text left for the lead to apply at merge is checked against later decisions**, and a test's
+  temporary exception waiting for it goes in the same commit. Why: a doc text written early
+  predated a decision taken for another story, and an exception would have outlived its reason.
+- **Two branches adding to one ordered list keep both entries in merge order.** Why: migrations
+  and startup registrations from parallel branches conflicted or collided at every second merge.
+- **A test whose setup differs from what ships is checked against the shipped value.** Why: two
+  blind tests failed on framework log lines that the shipped log filter drops; the fix was the
+  test's setup, not the product.
+- **The tester hands back only after its runs finish.** Why: agents ended their turn while their
+  own run was still queued, so the report described results nobody had seen.
+
+## Unreleased — 2026-11-10 (mutant builds can't hang the machine)
+- **Mutants build without the shared compiler server, under a timeout.** The tester builds each mutant
+  with any shared compiler server or build daemon off (for .NET, `-p:UseSharedCompilation=false
+  -nodeReuse:false`), with a hard timeout, and lists a mutant whose build times out as "not viable".
+  Why: in a run with parallel lanes, a mutation build ran for hours twice while it held the
+  machine-wide build lock. It stayed alive, so the lock was never taken over, and every lane's builds
+  waited.
+- **A mutation copy carries every build input, and its baseline passes first.** Why: the cause of
+  those hours was the copy itself. It lacked the analyzer config that the shared build props
+  reference, so every analyzer threw and even the unmutated build ran past the timeout.
+- **heavy.sh no longer crashes when `stat` prints text.** `last_alive` now accepts only a number.
+  Why: on GNU systems the BSD fallback `stat -f %m` prints filesystem status, so during a lock
+  hand-off the wrapper died with "File: unbound variable". A self-test with a fake `stat` covers it.
+
+## Unreleased — 2026-11-03 (fallback when a subagent's model is refused)
+- **A refused model falls back to the session's model.** When the client refuses the model picked for
+  the reviewer or tester (an access or quota error), the same brief goes again with the session's
+  model, the user is told in one line, and the substitute is recorded for the rest of the run. Why:
+  in a run where one model was unavailable to the account, each round's dispatch failed first and was
+  retried by hand; the plan's model choice had no rule for "not allowed" as opposed to "too shallow".
+
 ## 1.13.0 — 2026-10-25 (answers relayed from the sprint lead)
 - **`Answers: sprint-lead` in the launch brief**, the user's opt-in to answer a background unit from
   the orchestrator's session: the run never calls AskUserQuestion and never waits in its own chat.

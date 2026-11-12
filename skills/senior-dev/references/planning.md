@@ -102,3 +102,6 @@ user can override it.
 - **Upgrade instead of accepting a shallow result.** If a cheaper model's output looks thin (generic
   findings, obvious paths missed, happy-path-only tests), dispatch that role again once with a
   stronger model. Record the choice and any upgrade in the state file.
+- **A refused model is not a failed review.** If the client refuses a subagent's model (an access or
+  quota error, not a bad result), dispatch the same brief again with the session's own model, say so
+  in one line, and record the substitute for the rest of the run, so later rounds skip the refused one.
