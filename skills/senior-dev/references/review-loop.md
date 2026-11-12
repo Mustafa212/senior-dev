@@ -157,6 +157,9 @@ Then decide:
   - `COSMETIC` means the test is coupled to presentation. Fix the test (a stable ID, no assertion
     on text the story doesn't specify), and only when the outcome was verified correct.
   - `ENVIRONMENT` means fix the setup and rerun. It's not a finding against the change.
+  - A test that fails only because its setup differs from what ships (a log filter, a setting, a
+    registration): check the shipped value. If it already gives the story's outcome, make the test
+    use it, record the decision, and rerun; otherwise it's a finding.
   - A **surviving mutation** means a test doesn't actually check its AC. Strengthen the test until
     it kills the mutation.
 
@@ -201,5 +204,19 @@ shows across them, such as duplicated logic, patterns that drifted between slice
 don't fit together. Its findings go through the same triage. Fix the blockers and majors in one
 pass and rerun every related test, then stop: whatever is still open goes to the user in the final
 report. There is no second final round.
+
+## Before the merge
+
+- When the branch merges its base, or anything lands after the blind tests ran, merge that final tip
+  into the tester's branch and rerun its tests there. A pass on an earlier tip proves only that tip.
+- A run's output is evidence only when its tail shows the run's own exit line and counts. A
+  wrapper's failure in the file (no free process, a lock error) is neither a pass nor a fail: run it
+  again.
+- Text an implementer left for you to apply at merge (a doc section, a test's temporary exception
+  waiting for it): check it against the decisions made since it was written, apply it, and remove
+  the exception in the same commit.
+- Two branches that each add to an ordered list (migrations, registrations in one startup file)
+  conflict or collide when the second merges: keep both entries in merge order, renumber a colliding
+  id, then run the gate.
 
 The done criteria and the round cap are in Phase 7 of `SKILL.md`.

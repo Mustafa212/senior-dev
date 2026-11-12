@@ -31,8 +31,10 @@ beat() { date +%s > "$lock/heartbeat.$me" 2>/dev/null && mv -f "$lock/heartbeat.
 # When the lock was last known alive: its heartbeat, or, if that is missing or not a number, the
 # lock folder's modification time. Prints nothing when neither can be read.
 last_alive() {
-  local hb; hb=$(cat "$1/heartbeat" 2>/dev/null)
-  case "$hb" in ''|*[!0-9]*) stat -c %Y "$1" 2>/dev/null || stat -f %m "$1" 2>/dev/null ;; *) echo "$hb" ;; esac
+  local t; t=$(cat "$1/heartbeat" 2>/dev/null)
+  case "$t" in ''|*[!0-9]*) t=$(stat -c %Y "$1" 2>/dev/null || stat -f %m "$1" 2>/dev/null) ;; esac
+  # Numbers only: GNU `stat -f` is filesystem status, and its text would break the arithmetic.
+  case "$t" in ''|*[!0-9]*) ;; *) echo "$t" ;; esac
 }
 
 # Take over a lock whose holder stopped refreshing it. The move is atomic, and the lock is checked

@@ -97,4 +97,12 @@ rm -rf "$lock"
 timeout 10 bash "$heavy" bash -c "bash '$heavy' true" 2>/dev/null; code=$?
 check "a nested heavy.sh call doesn't wait on its own lock" '[ "$code" -eq 0 ]'
 
+# 14. A `stat` that prints text instead of a number (GNU `stat -f` is filesystem status) doesn't
+#     crash the wrapper; the lock is just not judged stale.
+mkdir -p "$tmp/fakebin"; printf '#!/bin/sh\necho "  File: x"\n' > "$tmp/fakebin/stat"; chmod +x "$tmp/fakebin/stat"
+plant_lock "abc" "text-stat"
+PATH="$tmp/fakebin:$PATH" HEAVY_LOCK_STALE_SECONDS=5 timeout 3 bash "$heavy" true 2> "$tmp/err14"; code=$?
+check "a non-numeric stat result doesn't crash the wrapper" '[ "$code" -eq 124 ] && ! grep -q "unbound variable" "$tmp/err14"'
+rm -rf "$lock"
+
 if [ "$failures" -eq 0 ]; then echo "all heavy.sh tests passed"; else echo "$failures heavy.sh test(s) failed"; exit 1; fi

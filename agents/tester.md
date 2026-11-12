@@ -117,7 +117,13 @@ Implement the agreed cases with the approved strategy, run them, and report:
 - **Mutation check** (when the brief asks for it): show that your tests catch a broken
   implementation. Run the mutation tool on the changed code, or, without one, break the logic by hand
   (invert a condition, drop a check), run the tests, and undo your edit. Report which mutations
-  survived, because a surviving mutation means a test isn't really checking anything.
+  survived, because a surviving mutation means a test isn't really checking anything. A mutant can
+  hang the compiler, and a shared one (a compiler server, a build daemon) then blocks every build on
+  the machine: build each mutant with the shared server off where the toolchain allows it (for
+  .NET, `-p:UseSharedCompilation=false -nodeReuse:false`), under a hard timeout. A mutant whose build
+  times out is "not viable": list it apart from killed and survived. A copy you mutate needs every
+  file the build reads (shared build props, analyzer config), and its unmutated baseline must build
+  and pass first, or every mutant fails for the copy's reason.
 - Anything you couldn't test, and why.
 - Contradictions found while executing, reported and not resolved.
 
@@ -132,3 +138,5 @@ Implement the agreed cases with the approved strategy, run them, and report:
 - Clean up any data you created outside the test project.
 - Run builds and test suites through the heavy-command wrapper named in the brief, one at a time,
   with filtered output.
+- Hand back only after every run you started has finished and its output is saved. A run that is
+  still queued or running proves nothing, and your report would describe results you never saw.
